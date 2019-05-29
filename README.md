@@ -20,3 +20,10 @@ Efficient pxRect + SVG based "Equalizer" type compoent.
 Animation effect of TV powering off. Analogue aesthetic. 
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkPowerOff/SparkPowerOff.png"  alt="Image of SparkPowerOff" width="300">
+
+
+## FibonicciBoard - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/FibonicciBoard)
+
+Rendering a Fibonicci Game board using Spark. 
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/FibonicciBoard/FibonicciBoard.png"  alt="Image of FibonicciBoard" width="300">
