@@ -14,4 +14,4 @@ Efficient pxRect + SVG based "Equalizer" type compoent.
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.png"  alt="Image of Equalizers" width="300">
 
-[EqualizersSVG](https://github.com/FitzerIRL/SparkExamples/master/EqualizerSVG)
+[EqualizersSVG](https://github.com/FitzerIRL/SparkExamples/tree/master/EqualizerSVG)
