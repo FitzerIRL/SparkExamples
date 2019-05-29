@@ -5,4 +5,5 @@ Examples and Doodles using Spark !!
 
 Basic "particle system"-like simulation.
 
-![Image of pxSnowFlakes](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes/pxSnowFlakes.png)
+img[Image of pxSnowFlakes]
+(https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes/pxSnowFlakes.png) <!-- .element height="50%" width="50%" -->
