@@ -13,3 +13,5 @@ Basic "particle system"-like simulation.
 Efficient pxRect + SVG based "Equalizer" type compoent.
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.png"  alt="Image of Equalizers" width="300">
+
+[EqualizersSVG](FitzerIRL/SparkExamples/master/EqualizerSVG)
