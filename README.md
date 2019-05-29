@@ -8,8 +8,8 @@ Basic "particle system"-like simulation.
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/pxSnowFlakes.png"  alt="Image of pxSnowFlakes" width="300">
 
 
-## pxSnowFlakes
+## EqualizersSVG
 
-Basic "particle system"-like simulation.
+Efficient pxRect + SVG based "Equalizer" type compoent.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.png"  alt="Image of pxSnowFlakes" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.png"  alt="Image of Equalizers" width="300">
