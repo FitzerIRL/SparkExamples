@@ -1,6 +1,14 @@
 # SparkExamples
 Examples and Doodles using Spark !!
 
+
+## SparkAnim - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkAnim)
+
+Rendering a Spark Logo animation.
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/SparkAnim.png"  alt="Image of SparkAnim" width="300">
+
+
 ## pxSnowFlakes - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes)
 
 Basic "particle system"-like simulation.
