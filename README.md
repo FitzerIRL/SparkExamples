@@ -1,7 +1,7 @@
 # SparkExamples
 Examples and Doodles using Spark !!
 
-## pxSnowFlakes
+## pxSnowFlakes - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes)
 
 Basic "particle system"-like simulation.
 
