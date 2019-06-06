@@ -1,7 +1,7 @@
 # SparkExamples
 Examples and Doodles using Spark !!
 
-NOTE: Right-Click on the "Launch" links below to copy the launchable URL for use in Spark Desktop. (macOS/Windows/Ubuntu)
+NOTE: Right-Click on the "Launch" links below to copy the launchable URL for use in Spark Desktop.
 
 ## SparkAnim - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkAnim) - [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/dist/output.js)
 
