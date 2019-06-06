@@ -21,7 +21,7 @@ Basic "particle system"-like simulation.
 
 Efficient pxRect + SVG based "Equalizer" type compoent.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.png"  alt="Image of Equalizers" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/EqualizerSVG.gif"  alt="Image of Equalizers" width="300">
 
 
 ## SparkPowerOff - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkPowerOff) - [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkPowerOff/dist/output.js)
