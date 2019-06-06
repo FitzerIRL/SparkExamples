@@ -14,7 +14,7 @@ Rendering a Spark Logo animation.
 
 Basic "particle system"-like simulation.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/pxSnowFlakes.png"  alt="Image of pxSnowFlakes" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/pxSnowFlakes.gif"  alt="Image of pxSnowFlakes" width="300">
 
 
 ## EqualizersSVG - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/EqualizerSVG) - [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/EqualizerSVG/dist/output.js)
