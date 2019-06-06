@@ -7,7 +7,7 @@ NOTE: Right-Click on the "Launch" links below to copy the launchable URL for use
 
 Rendering a Spark Logo animation.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/SparkAnim.png"  alt="Image of SparkAnim" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/SparkAnim.gif"  alt="Image of SparkAnim" width="300">
 
 
 ## pxSnowFlakes - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes) - [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/dist/output.js)
