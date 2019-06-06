@@ -2,7 +2,7 @@
 Examples and Doodles using Spark !!
 
 
-## SparkAnim - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkAnim)
+## SparkAnim - [link](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkAnim) [lunch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/dist/output.js)
 
 Rendering a Spark Logo animation.
 
