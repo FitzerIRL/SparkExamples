@@ -5,6 +5,16 @@ px.import({       scene: 'px:scene.1.js'
   var root  = imports.scene.root;
   var base  = px.getPackageBaseFilePath();
 
+  if( scene.capabilities                  == undefined ||
+      scene.capabilities.graphics         == undefined ||
+      scene.capabilities.graphics.shaders == undefined ||
+      scene.capabilities.graphics.shaders < 1)
+  {
+    // If Shader is not supported...
+    hasShaders = false;
+    throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
+  }
+
   var rock   = scene.create({ id: "rock",  t: 'imageResource', url: base + "/rock.png"   });
   var rock_n = scene.create({ id: "roc_n", t: 'imageResource', url: base + "/rock_n.png" });
 

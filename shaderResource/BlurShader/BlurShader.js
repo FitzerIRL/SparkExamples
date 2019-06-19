@@ -5,6 +5,16 @@ px.import({       scene: 'px:scene.1.js'
   var root  = imports.scene.root;
   var base  = px.getPackageBaseFilePath();
 
+  if( scene.capabilities                  == undefined ||
+      scene.capabilities.graphics         == undefined ||
+      scene.capabilities.graphics.shaders == undefined ||
+      scene.capabilities.graphics.shaders < 1)
+  {
+    // If Shader is not supported...
+    hasShaders = false;
+    throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
+  }
+
   const STRETCH = scene.stretch.STRETCH;
 
   var URL   = "http://www.sparkui.org/examples/gallery/fancy.js";

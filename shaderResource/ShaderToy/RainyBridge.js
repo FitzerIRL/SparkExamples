@@ -6,7 +6,7 @@ px.import({       scene: 'px:scene.1.js'
   var base  = px.getPackageBaseFilePath();
 
   var hasShaders    = true;
-  
+
   const STRETCH = scene.stretch.STRETCH;
 
   if( scene.capabilities                  == undefined ||
@@ -16,6 +16,7 @@ px.import({       scene: 'px:scene.1.js'
   {
     // If Shader is not supported...
     hasShaders = false;
+    throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
   var ss    = 0.9;

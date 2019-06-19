@@ -18,6 +18,7 @@ px.import({       scene: 'px:scene.1.js',
   {
     // If Shader is not supported...
     hasShaders = false;
+    throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
