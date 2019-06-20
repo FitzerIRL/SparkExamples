@@ -26,13 +26,44 @@ Efficient pxRect + SVG based "Equalizer" type compoent.
 
 ## SparkPowerOff -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/SparkPowerOff)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkPowerOff/dist/output.js)
 
-Animation effect of TV powering off. Analogue aesthetic. 
+Animation effect of TV powering off. Analogue aesthetic.
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkPowerOff/SparkPowerOff.gif"  alt="Image of SparkPowerOff" width="300">
 
 
 ## FibonicciBoard -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/FibonicciBoard)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/FibonicciBoard/dist/output.js)
 
-Rendering a Fibonicci Game board using Spark. 
+Rendering a Fibonicci Game board using Spark.
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/FibonicciBoard/FibonicciBoard.png"  alt="Image of FibonicciBoard" width="300">
+
+# Shader Resource
+
+## BlurShader -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/BlurShader)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BlurShader.js)
+
+Example of a Gaussian Blur - 2 pas shader.
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BlurShader.png"  alt="Image of BlurShader" width="300">
+
+
+## BumpShader -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/BumpShader)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BumpShader/BumpShader.js)
+
+Example of a Normal/Bump shader using a 'normal' texture to apply lighting depth.
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BumpShader.png"  alt="Image of BumpShader" width="300">
+
+
+## ShaderToy -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy.js)
+
+Example of various Fragment Shaders from [ShaderToy.com](ShaderToy.com)
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy.png"  alt="Image of ShaderToy" width="300">
+
+
+### ShaderToy2 -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy2.js)
+
+### ShaderToy3 -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy3.js)
+
+### RainyBridge -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/RainyBridge.js)
+
+### Sanctuary -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/Sanctuary.js)
