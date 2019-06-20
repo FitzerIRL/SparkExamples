@@ -50,7 +50,7 @@ Example of a Gaussian Blur - 2 pass shader.
 
 Example of a Normal/Bump shader using a 'normal' texture to apply lighting depth.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BumpMap.gif"  alt="Image of BumpShader" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BumpShader/BumpMap.gif"  alt="Image of BumpShader" width="300">
 
 
 ## ShaderToy -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy.js)
