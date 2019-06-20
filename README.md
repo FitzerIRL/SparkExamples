@@ -57,7 +57,7 @@ Example of a Normal/Bump shader using a 'normal' texture to apply lighting depth
 
 Example of various Fragment Shaders from [ShaderToy.com](ShaderToy.com)
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy.png"  alt="Image of ShaderToy" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy.gif"  alt="Image of ShaderToy" width="300">
 
 
 * ### ShaderToy2 -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/ShaderToy2.js)
