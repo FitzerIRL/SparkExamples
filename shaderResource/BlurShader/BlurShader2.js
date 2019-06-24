@@ -50,7 +50,7 @@ px.import({       scene: 'px:scene.1.js'
     this.mouseDown   = false;
 
     var bg     = scene.create({ t: 'rect', parent: parent, fillColor: '#222', lineColor: '#333', lineWidth: 1, x: x, y:  y, w:  w, h:  h, px:  px, py:  py, interactive: true, focus: true });
-    var knob   = scene.create({ t: 'rect', parent: bg,     fillColor: '#444', lineColor: '#555', lineWidth: 1, x: 0, y: 10, w: 16, h: 16, px: 0.0, py: 0.5, interactive: true });
+    var knob   = scene.create({ t: 'rect', parent: bg,     fillColor: '#444', lineColor: '#555', lineWidth: 1, x: 2, y: 10, w: 16, h: 16, px: 0.0, py: 0.5, interactive: true });
 
     knob.on('onMouseUp',    (e) =>  { mouseDown = false;  e.stopPropagation(); });
     knob.on('onMouseEnter', ( ) =>  { knob.fillColor = '#666'; });
@@ -59,8 +59,10 @@ px.import({       scene: 'px:scene.1.js'
 
     bg  .on('onMouseUp',    (e) =>
     {
-      var max_w = (bg.w - knob.w);
-      var pos   = e.x;
+      var max_w = (bg.w - knob.w/2) - 2;
+      // var pos   = e.x + 2;
+
+      var pos = Math.max(knob.w/2, Math.min(e.x + 2, max_w));
 
       knob.x = pos - knob.w/2;
 
@@ -77,9 +79,9 @@ px.import({       scene: 'px:scene.1.js'
         this.mouseDown   = true;
       }
 
-      var max_w = (bg.w - knob.w);
+      var max_w = (bg.w - knob.w) - 2;
       var dx    = (e.x - this.drag_startX); // drag delta
-      var pos   = Math.max(0, Math.min(dx + this.startX, max_w));
+      var pos   = Math.max(2, Math.min(dx + this.startX, max_w));
 
       knob.x = pos;
 
