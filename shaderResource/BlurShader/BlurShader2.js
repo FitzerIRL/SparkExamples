@@ -52,24 +52,28 @@ px.import({       scene: 'px:scene.1.js'
     var bg     = scene.create({ t: 'rect', parent: parent, fillColor: '#222', lineColor: '#333', lineWidth: 1, x: x, y:  y, w:  w, h:  h, px:  px, py:  py, interactive: true, focus: true });
     var knob   = scene.create({ t: 'rect', parent: bg,     fillColor: '#444', lineColor: '#555', lineWidth: 1, x: 2, y: 10, w: 16, h: 16, px: 0.0, py: 0.5, interactive: true });
 
-    knob.on('onMouseUp',    (e) =>  { mouseDown = false;  e.stopPropagation(); });
-    knob.on('onMouseEnter', ( ) =>  { knob.fillColor = '#666'; });
-    knob.on('onMouseLeave', ( ) =>  { knob.fillColor = '#444'; });
-    bg  .on('onMouseLeave', ( ) =>  { knob.fillColor = '#444'; });
+    var max_w = (bg.w - knob.w - 4);
 
-    bg  .on('onMouseUp',    (e) =>
+    // Handle Clicks...
+    //
+    bg.on('onMouseLeave', ( ) =>  { knob.fillColor = '#444'; });
+    bg.on('onMouseUp',    (e) =>
     {
-      var max_w = (bg.w - knob.w/2) - 2;
-      // var pos   = e.x + 2;
+      var pos = Math.max(0, Math.min(e.x - knob.w/2, max_w));
 
-      var pos = Math.max(knob.w/2 + 2, Math.min(e.x + 2, max_w));
+      knob.x  = pos + 2;
+      var pc = (pos / max_w * 100.0);
 
-      knob.x = pos - knob.w/2;
+      // console.log("## CLICK >>  Slider Power: " + pc );
 
-      var pc = ( pos / max_w * 100.0);
       if(cb) cb(pc); // CALLBACK
     });
 
+    // Handle Drags...
+    //
+    knob.on('onMouseUp',    (e) =>  { mouseDown = false;  e.stopPropagation(); });
+    knob.on('onMouseEnter', ( ) =>  { knob.fillColor = '#666'; });
+    knob.on('onMouseLeave', ( ) =>  { knob.fillColor = '#444'; });
     knob.on('onMouseDrag',  (e) =>
     {
       if(this.mouseDown == false)
@@ -79,15 +83,13 @@ px.import({       scene: 'px:scene.1.js'
         this.mouseDown   = true;
       }
 
-      var max_w = (bg.w - knob.w) - 2;
-      var dx    = (e.x - this.drag_startX); // drag delta
-      var pos   = Math.max(2, Math.min(dx + this.startX, max_w));
+      var dx  = (e.x - this.drag_startX); // drag delta
+      var pos = Math.max(0, Math.min(dx - knob.w/2, max_w));
 
-      knob.x = pos;
+      knob.x  = pos + 2;
+      var pc  = ( pos / max_w * 100.0);
 
-      var pc = ( pos / max_w * 100.0);
-
-      console.log("## Slider Power: " + pc );
+      // console.log("## DRAG >>  Slider Power: " + pc );
 
       if(cb) cb(pc); // CALLBACK
     });
