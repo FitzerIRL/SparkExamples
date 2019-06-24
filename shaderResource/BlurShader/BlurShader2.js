@@ -62,7 +62,7 @@ px.import({       scene: 'px:scene.1.js'
       var max_w = (bg.w - knob.w/2) - 2;
       // var pos   = e.x + 2;
 
-      var pos = Math.max(knob.w/2, Math.min(e.x + 2, max_w));
+      var pos = Math.max(knob.w/2 + 2, Math.min(e.x + 2, max_w));
 
       knob.x = pos - knob.w/2;
 
