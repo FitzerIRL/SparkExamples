@@ -38,9 +38,9 @@ px.import({       scene: 'px:scene.1.js'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  /* SLIDER CLASS */
-
+  //
+  // SLIDER CLASS
+  //
   function slider(parent, cb, x, y, w = 300, h = 20, px = 0.0, py = 0.0 )
   {
     this.cb = cb;
@@ -113,7 +113,7 @@ px.import({       scene: 'px:scene.1.js'
                                       pixelSize: 44, textColor:'#fff', text:  'Blurring', interactive: false, id: "testText1" });
 
   function onPercent1(pc) { doImageBlur(text, pc); }
-  var slider1        = new slider(text_obj, onPercent1, text_obj.w/2, text_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider1     = new slider(text_obj, onPercent1, text_obj.w/2, text_obj.h - 10, 300, 20, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //
@@ -123,7 +123,7 @@ px.import({       scene: 'px:scene.1.js'
   var image       = scene.create({ t: 'image',parent: image_obj, x: w2/2, y: 10, w: w1, h: h1, px: 0.5, py: 0.0, url: URL, interactive: false, stretchX: STRETCH, stretchY: STRETCH });
 
   function onPercent2(pc) { doImageBlur(image, pc); }
-  var slider2        = new slider(image_obj, onPercent2, image_obj.w/2, image_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider2     = new slider(image_obj, onPercent2, image_obj.w/2, image_obj.h - 10, 300, 20, 0.5, 1.0);
 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -135,7 +135,7 @@ px.import({       scene: 'px:scene.1.js'
   var rect_fill   = scene.create({ t: 'rect',   parent:     rect, x: 10,   y: 10, w: w1-20, h:  60-20, px: 0.0, py: 0.0, fillColor: "#ffA500", interactive: false });
 
   function onPercent3(pc) { doImageBlur(rect, pc); }
-  var slider3       = new slider(rect_obj, onPercent3, rect_obj.w/2, rect_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider3     = new slider(rect_obj, onPercent3, rect_obj.w/2, rect_obj.h - 10, 300, 20, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - -  p - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //
@@ -147,7 +147,7 @@ px.import({       scene: 'px:scene.1.js'
                                       pixelSize: 44, textColor:'#00f', text:  'Blurring', interactive: false  });
 
   function onPercent4(pc) { doImageBlur(combo_image, pc); }
-  var slider4        = new slider(combo_obj, onPercent4, combo_obj.w/2, combo_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider4     = new slider(combo_obj, onPercent4, combo_obj.w/2, combo_obj.h - 10, 300, 20, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
