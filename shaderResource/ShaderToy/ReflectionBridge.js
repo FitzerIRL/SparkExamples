@@ -24,10 +24,10 @@ px.import({       scene: 'px:scene.1.js'
 
   var heart_res = scene.create({ t: 'imageResource', url:  base + "/images/heart.svg", w: 25, h: 25});
 
-  var clip_obj = scene.create({ t: 'object', parent: image, x: scene.w/2, y: scene.h/2, fillColor: "#888", w: 300, h: 550, px: 0.5, py: 0.5, interactive: false });
+  var clip_obj = scene.create({ t: 'object', parent: image, x: scene.w/2, y: scene.h/2, fillColor: "#888", w: 300, h: 550, px: 0.5, py: 0.5, interactive: false, draw: false });
   var logo     = scene.create({ t: 'image',  parent: clip_obj, x: 10, y: 300, w: 100, h: 100, cx: 128, cy: 128, url: base + "/images/Spark_logo256px.png", interactive: false });
 
-  var message_obj = scene.create({ t: 'object', parent: clip_obj, x: 0, y: 300, fillColor: "#888", w: 300, h: 20, px: 0.5, py: 0.5, interactive: false });
+  var message_obj = scene.create({ t: 'object', parent: clip_obj, x: 0, y: 300, fillColor: "#888", w: 300, h: 20, px: 0.5, py: 0.5, interactive: false, draw: false });
 
   var made_with = scene.create({t:'text', w: 100, h: 20,  x: 100, y: 0, parent: message_obj,
                     pixelSize: 24, textColor:'#fff', text:  'Made with ', interactive: false });
@@ -38,22 +38,6 @@ px.import({       scene: 'px:scene.1.js'
               pixelSize: 24, textColor:'#fff', text:  'in Philadelphia', interactive: false });
 
 
-  setTimeout( () =>
-  {
-    logo.animateTo({ y: 10 }, 2.5);
-
-    setTimeout( () =>
-    {
-      logo.animateTo({ y: 300 }, 2.5);
-
-      setTimeout( () =>
-      {
-        message_obj.animateTo({ y: 225 }, 2.5);
-      },1500)
-
-    }, 8000)
-
-  }, 2000)
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   function CreateShader(filename)
@@ -74,10 +58,30 @@ px.import({       scene: 'px:scene.1.js'
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  if(hasShaders == true)
+  Promise.all([bg.ready, image.ready, heart_res.ready, made_with.ready, heart_img.ready, in_philly.ready]).then( () =>
   {
-    image.effect = CreateShader("WaterReflection.frg");
-  }
+    clip_obj.draw    = true;
+    message_obj.draw = true;
+
+    if(hasShaders == true)
+    {
+      image.effect = CreateShader("WaterReflection.frg");
+
+      setTimeout( () =>
+      {
+        logo.animateTo({ y: 10 }, 2.5);
+
+        setTimeout( () =>
+        {
+          logo.animateTo({ y: 300 }, 2.5);
+
+          setTimeout( () => { message_obj.animateTo({ y: 225 }, 2.5); }, 1500)
+        }, 8000)
+
+      }, 2000)
+    }
+  });
+
 
   scene.on("onResize", function (e)
   {
