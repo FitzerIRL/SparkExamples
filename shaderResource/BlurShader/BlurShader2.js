@@ -19,11 +19,14 @@ px.import({       scene: 'px:scene.1.js'
 
   var URL = base + "/test-pattern.png";
 
-  var x1 = 300;
-  var y1 = scene.h/2 - 150;
+  // Border and 2x Border
+  var bb = 10, b2 = bb * 2;
 
-  var x2 = 900;
-  var y2 = scene.h/2 + 100;
+  var x1 = (scene.w - b2) * 0.25;
+  var y1 = (scene.h - b2) * 0.50 - 120;
+
+  var x2 = (scene.w - b2) * 0.75;
+  var y2 = (scene.h - b2) * 0.50 + 120;
 
   var ar = 16/9;
 
@@ -49,8 +52,8 @@ px.import({       scene: 'px:scene.1.js'
     this.startX      = 0;
     this.mouseDown   = false;
 
-    var bg     = scene.create({ t: 'rect', parent: parent, fillColor: '#222', lineColor: '#333', lineWidth: 1, x: x, y:  y, w:  w, h:  h, px:  px, py:  py, interactive: true, focus: true });
-    var knob   = scene.create({ t: 'rect', parent: bg,     fillColor: '#444', lineColor: '#555', lineWidth: 1, x: 2, y: 10, w: 16, h: 16, px: 0.0, py: 0.5, interactive: true });
+    var bg   = scene.create({ t: 'rect', parent: parent, fillColor: '#222', lineColor: '#333', lineWidth: 1, x: x, y:  y, w:  w, h:  h, px:  px, py:  py, interactive: true, focus: true });
+    var knob = scene.create({ t: 'rect', parent: bg,     fillColor: '#444', lineColor: '#555', lineWidth: 1, x: 2, y: 10, w: 16, h: 16, px: 0.0, py: 0.5, interactive: true });
 
     var max_w = (bg.w - knob.w - 4);
 
@@ -100,7 +103,7 @@ px.import({       scene: 'px:scene.1.js'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  var bg    = scene.create({ t: 'rect',  parent:     root, x: 10, y: 10, w: 1260, h:  700, fillColor: '#111', interactive: true});
+  var bg    = scene.create({ t: 'rect',  parent: root, x: bb, y: bb, w: (scene.w - b2), h: (scene.h - b2), fillColor: '#111', interactive: true});
 
   var title = scene.create({t:'textBox', w: bg.w, h: 50, parent: bg, x: 0, y: 30,
                       pixelSize: 60, textColor: '#aaa', text:  'Blur Shader Tests', interactive: false,
@@ -112,22 +115,22 @@ px.import({       scene: 'px:scene.1.js'
   // Create TEXT + BLUR Slider
   //
 
-  var text_obj    = scene.create({ t: 'rect', parent:       bg, x: x1,            y: y1, w:  w2,        h: 120, px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
-  var text        = scene.create({ t: 'text', parent: text_obj, x:  text_obj.w/2, y: 20, w: text_obj.w, h: 100, px: 0.5, py: 0.0,
+  var text_obj    = scene.create({ t: 'rect', parent:       bg, x: x1,           y: y1, w:  w2,        h: 120, px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
+  var text        = scene.create({ t: 'text', parent: text_obj, x: text_obj.w/2, y: 20, w: text_obj.w, h: 100, px: 0.5, py: 0.0,
                                       pixelSize: 44, textColor:'#fff', text:  'Blurring', interactive: false, id: "testText1" });
 
   function onPercent1(pc) { doImageBlur(text, pc); }
-  var slider1     = new slider(text_obj, onPercent1, text_obj.w/2, text_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider1     = new slider(text_obj, onPercent1, text_obj.w/2, text_obj.h - bb, 300, 20, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //
   // Create IMAGE + BLUR Slider
   //
   var image_obj   = scene.create({ t: 'rect', parent:        bg, x: x1,   y: y2, w: w2, h: h2, px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
-  var image       = scene.create({ t: 'image',parent: image_obj, x: w2/2, y: 10, w: w1, h: h1, px: 0.5, py: 0.0, url: URL, interactive: false, stretchX: STRETCH, stretchY: STRETCH });
+  var image       = scene.create({ t: 'image',parent: image_obj, x: w2/2, y: bb, w: w1, h: h1, px: 0.5, py: 0.0, url: URL, interactive: false, stretchX: STRETCH, stretchY: STRETCH });
 
   function onPercent2(pc) { doImageBlur(image, pc); }
-  var slider2     = new slider(image_obj, onPercent2, image_obj.w/2, image_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider2     = new slider(image_obj, onPercent2, image_obj.w/2, image_obj.h - bb, 300, 20, 0.5, 1.0);
 
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -135,11 +138,11 @@ px.import({       scene: 'px:scene.1.js'
   // Create RECT + BLUR Slider
   //
   var rect_obj    = scene.create({ t: 'rect',   parent:       bg, x: x2,   y: y1, w: w2,    h: 120,    px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
-  var rect        = scene.create({ t: 'object', parent: rect_obj, x: w2/2, y: 10, w: w1,    h:  60,    px: 0.5, py: 0.0,                       interactive: false });
-  var rect_fill   = scene.create({ t: 'rect',   parent:     rect, x: 10,   y: 10, w: w1-20, h:  60-20, px: 0.0, py: 0.0, fillColor: "#ffA500", interactive: false });
+  var rect        = scene.create({ t: 'object', parent: rect_obj, x: w2/2, y: bb, w: w1,    h:  60,    px: 0.5, py: 0.0,                       interactive: false });
+  var rect_fill   = scene.create({ t: 'rect',   parent:     rect, x: bb,   y: bb, w: w1-20, h:  60-20, px: 0.0, py: 0.0, fillColor: "#ffA500", interactive: false });
 
   function onPercent3(pc) { doImageBlur(rect, pc); }
-  var slider3     = new slider(rect_obj, onPercent3, rect_obj.w/2, rect_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider3     = new slider(rect_obj, onPercent3, rect_obj.w/2, rect_obj.h - bb, 300, b2, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - -  p - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //
@@ -151,8 +154,9 @@ px.import({       scene: 'px:scene.1.js'
                                       pixelSize: 44, textColor:'#00f', text:  'Blurring', interactive: false  });
 
   function onPercent4(pc) { doImageBlur(combo_image, pc); }
-  var slider4     = new slider(combo_obj, onPercent4, combo_obj.w/2, combo_obj.h - 10, 300, 20, 0.5, 1.0);
+  var slider4     = new slider(combo_obj, onPercent4, combo_obj.w/2, combo_obj.h - bb, 300, b2, 0.5, 1.0);
 
+  //var pc25 = scene.create({ t: 'rect', parent: bg, fillColor: '#0000', lineColor: '#0F0', lineWidth: 2, x: scene, y: 0, w: 100, h: 100, interactive: false }); 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   var blurShader = scene.create({  t:'shaderResource',
