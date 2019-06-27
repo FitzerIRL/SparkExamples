@@ -26,6 +26,7 @@ px.import({       scene: 'px:scene.1.js',
   var rect = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
 
   var toys = [
+      "GeodesicTiling.frg",
       "FluxCore.frg",
       // "InsideTheMatrix.frg",  // ES 3.0 :(
       "InfinityMatrixLite.frg",
@@ -145,7 +146,9 @@ px.import({       scene: 'px:scene.1.js',
       // Handle KEYUP event
       paused = !paused;
 
-      Message.text = (paused ? "PAUSED" : "Unpaused");
+      scene.collectGarbage(); //DEBUG
+
+      Message.text = (paused ? "PAUSED ++" : "Unpaused ++");
       showHide( MessageBG );
     }
     else
