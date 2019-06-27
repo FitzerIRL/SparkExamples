@@ -18,6 +18,9 @@ uniform sampler2D   s_noise;
 // #define fragColor   gl_FragColor
 #define iMouse      u_mouse
 
+#define texture     texture2D
+#define textureLod  texture2D
+
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////

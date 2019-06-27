@@ -21,9 +21,15 @@ px.import({       scene: 'px:scene.1.js',
     throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
+  var noiseGRAY = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
+  var noiseRGBA = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
+
+  // var img = scene.create({ t: 'image', parent: root, resource: noise, x: 0, y: 0, interactive: false });
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   var rect = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
+
+  var foo = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
 
   var toys = [
       "GeodesicTiling.frg",
@@ -61,6 +67,19 @@ px.import({       scene: 'px:scene.1.js',
       // "InversionMachine.frg", // IFFY
       "DiskIntersection.frg",
       "CubesAndSpheres.frg",
+
+    // { filename: "ExplosionEffect.frg",   texture0: noiseRGBA },
+    { filename: "SeascapeSailing.frg",   texture0: noiseRGBA },
+    { filename: "InversionMachine.frg",  texture0: noiseRGBA },
+    { filename: "Generators.frg",        texture0: noiseRGBA },
+    // "DigitalBrain.frg",
+    // "DiskIntersection.frg",
+    // "CubesAndSpheres.frg",
+    // "Clouds.frg",
+    // "Generators.frg",
+    { filename: "2DClouds.frg",        texture0: noiseRGBA },
+    { filename: "Oceanic.frg",         texture0: noiseGRAY },
+    { filename: "RainierMood.frg",     texture0: noiseRGBA }
   ];
 
   var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w, h: 40, a: 0});
@@ -113,28 +132,44 @@ px.import({       scene: 'px:scene.1.js',
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  function isObject(val)
+  {
+    return val instanceof Object;
+  }
+
   var shaderToy = null;
 
-  function CreateShader(filename)
+  function CreateShader(shader)
   {
+    var filename = isObject(shader) ? shader.filename : shader;
+    var texture0 = isObject(shader) ? shader.texture0 ? shader.texture0 : null : null;
+
     var name = filename.split('.').slice(0, -1).join('.')
 
     showCaption(name);
 
     shaderToy = scene.create({
-                 t: 'shaderResource',
+                t: 'shaderResource',
           fragment: base + "/shaders/" + filename,
           uniforms:
           {
             "u_time"      : "float",
             "u_resolution": "vec2",
-            "u_mouse"     : "vec4"
+            "u_mouse"     : "vec4",
+            "s_texture"   : "sampler2D"
           }
         });
 
     shaderToy.ready.then( () =>
     {
-      rect.effect = shaderToy;
+      rect.effect =
+      {
+          name: "shaderToy",
+        shader: shaderToy,
+      uniforms: [
+        texture0 ? { s_texture: texture0 } : {}
+                ]
+      };
     });
   };
 
@@ -142,8 +177,6 @@ px.import({       scene: 'px:scene.1.js',
 
   rect.on('onMouseDrag',  (e) =>
   {
-      console.log(" onMouseDrag >>> x: " + e.x + "  y: " + e.y);
-
       rect.effect =
       {
           name: "Mouse",
@@ -164,8 +197,6 @@ px.import({       scene: 'px:scene.1.js',
     {
       // Handle KEYUP event
       paused = !paused;
-
-      scene.collectGarbage(); //DEBUG
 
       Message.text = (paused ? "PAUSED" : "Unpaused");
       showHide( MessageBG );
@@ -230,11 +261,16 @@ px.import({       scene: 'px:scene.1.js',
     }, 4000);
   }
 
-  if(hasShaders == true)
+  noiseRGBA.ready.then( () =>
   {
-    CreateShader(toys[index++]);
-    ResetInterval();
-  }
+    console.log("### READY");
+
+    if(hasShaders == true)
+    {
+      CreateShader(toys[index++]);
+      ResetInterval();
+    }
+  });
 
 
   scene.on("onResize", function (e)
