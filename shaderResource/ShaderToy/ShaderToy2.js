@@ -34,6 +34,7 @@ px.import({       scene: 'px:scene.1.js',
   var toys = [
 
     // { filename: "ExplosionEffect.frg",   texture0: noiseRGBA },
+    { filename: "SeascapeSailing.frg", texture0: noiseRGBA },
     { filename: "InversionMachine.frg",  texture0: noiseRGBA },
     { filename: "Generators.frg",        texture0: noiseRGBA },
     // "DigitalBrain.frg",
@@ -42,7 +43,6 @@ px.import({       scene: 'px:scene.1.js',
     // "Clouds.frg",
     // "Generators.frg",
     { filename: "2DClouds.frg",        texture0: noiseRGBA },
-    { filename: "SeascapeSailing.frg", texture0: noiseRGBA },
     { filename: "Oceanic.frg",         texture0: noiseGRAY },
     { filename: "RainierMood.frg",     texture0: noiseRGBA }
   ];
@@ -97,6 +97,8 @@ px.import({       scene: 'px:scene.1.js',
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  var shaderToy = null;
+
   function CreateShader(shader)
   {
     var filename = shader.filename;
@@ -106,13 +108,14 @@ px.import({       scene: 'px:scene.1.js',
 
     showCaption(name);
 
-    var shaderToy = scene.create({
+    shaderToy = scene.create({
                 t: 'shaderResource',
           fragment: base + "/shaders/" + filename,
           uniforms:
           {
             "u_time"      : "float",
             "u_resolution": "vec2",
+            "u_mouse"     : "vec4",
             "s_texture"   : "sampler2D"
           }
         });
@@ -129,6 +132,22 @@ px.import({       scene: 'px:scene.1.js',
       };
     });
   };
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  rect.on('onMouseDrag',  (e) =>
+  {
+      console.log(" onMouseDrag >>> x: " + e.x + "  y: " + e.y);
+
+      rect.effect =
+      {
+          name: "Mouse",
+        shader: shaderToy,
+      uniforms: {
+                  u_mouse:    [e.x, e.y, 0, 0]
+                }
+      };
+  });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

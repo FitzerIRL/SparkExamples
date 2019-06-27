@@ -4,19 +4,27 @@
     precision mediump float;
 #endif
 
-uniform vec2  u_resolution;
-uniform float u_time;
+uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
+uniform float       u_time;
+uniform sampler2D   s_noise;
 
 #define iResolution u_resolution
 #define iTime       u_time
+#define iChannel0   s_noise
+
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
+
+
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
 
@@ -27,11 +35,11 @@ vec2 csqr( vec2 a )  { return vec2( a.x*a.x - a.y*a.y, 2.*a.x*a.y  ); }
 
 vec3 dmul( vec3 a, vec3 b )  {
     float r = length(a);
-    
+
     b.xy=cmul(normalize(a.xy), b.xy);
     b.yz=cmul(normalize(a.yz), b.yz);
    // b.xz=cmul(normalize(a.xz), b.xz);
-    
+
     return r*b;
 }
 
@@ -43,16 +51,16 @@ vec3 pow4( vec3 z){
 vec3 pow3( vec3 z){
     float r2 = dot(z,z);
     vec2 a = z.xy;a=csqr(a)/dot( a,a);
-    vec2 b = z.yz;b=csqr(b)/dot( b,b); 
+    vec2 b = z.yz;b=csqr(b)/dot( b,b);
     vec2 c = z.xz;c=csqr(c)/dot( c,c);
-    z.xy = cmul(a,z.xy);   
-    z.yz = cmul(b,z.yz);      
+    z.xy = cmul(a,z.xy);
+    z.yz = cmul(b,z.yz);
     z.xz = cmul(c,z.xz);
     return r2*z;
 }
 
 mat2 rot(float a) {
-	return mat2(cos(a),sin(a),-sin(a),cos(a));	
+	return mat2(cos(a),sin(a),-sin(a),cos(a));
 }
 
 float zoom=4.;
@@ -60,16 +68,16 @@ float zoom=4.;
 
 
 float field(in vec3 p) {
-	
+
 	float res = 0.;
-	
+
     vec3 c = p;
 	for (int i = 0; i < 10; ++i) {
-		
+
         p = abs(p) / dot(p,p) -1.;
         p = dmul(p,p)+.7;
 		res += exp(-6. * abs(dot(p,c)-.15));
-		
+
 	}
 	return max(0., res/3.);
 }
@@ -83,14 +91,14 @@ vec3 raycast( in vec3 ro, vec3 rd )
     vec3 col= vec3(0.);
     for( int i=0; i<64; i++ )
 	{
-        
-        float c = field(ro+t*rd);               
+
+        float c = field(ro+t*rd);
         t+=dt/(.35+c*c);
         c = max(5.0 * c - .9, 0.0);
         col = .97*col+ .08*vec3(0.5*c*c*c, .6*c*c, c);
-		
+
     }
-    
+
     return col;
 }
 
@@ -115,14 +123,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 uu = normalize( cross(ww,vec3(0.0,1.0,0.0) ) );
     vec3 vv = normalize( cross(uu,ww));
     vec3 rd = normalize( p.x*uu + p.y*vv + 4.0*ww );
-    
+
 
 	// raymarch
     vec3 col = raycast(ro,rd);
-    
-	
+
+
 	// shade
-    
+
     col =  .5 *(log(1.+col));
     col = clamp(col,0.,1.);
     fragColor = vec4( sqrt(col), 1.0 );

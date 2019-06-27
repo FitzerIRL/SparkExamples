@@ -4,19 +4,25 @@
     precision mediump float;
 #endif
 
-uniform vec2  u_resolution;
-uniform float u_time;
+uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
+uniform float       u_time;
+uniform sampler2D   s_noise;
 
 #define iResolution u_resolution
 #define iTime       u_time
+#define iChannel0   s_noise
+
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
 /*
 "Tamby's Snowflakes" by Emmanuel Keller aka Tambako - December 2016
 License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -78,7 +84,7 @@ float noise(vec3 x)
     vec3 p = floor(x);
     vec3 f = fract(x);
     f = f*f*(3.0-2.0*f);
-	
+
     float n = p.x + p.y*157.0 + 113.0*p.z;
     return mix(mix(mix(hash(n+  0.0), hash(n+  1.0),f.x),
                    mix(hash(n+157.0), hash(n+158.0),f.x),f.y),
@@ -88,12 +94,12 @@ float noise(vec3 x)
 
 vec3 colorRamp3(vec3 col1, vec3 col2, vec3 col3, float v)
 {
-   return mix(mix(col1, col2, smoothstep(0.0, 0.5, v)), col3, smoothstep(0.5, 1.0, v));   
+   return mix(mix(col1, col2, smoothstep(0.0, 0.5, v)), col3, smoothstep(0.5, 1.0, v));
 }
 
 // Gets the color of the sky
 vec3 sky_color(vec3 ray)
-{ 
+{
     return skyColor*(1. + 0.35*ray.y);
 }
 
@@ -117,20 +123,20 @@ vec3 getFlakePosition(int flakeNr, float t)
     posX+= sinvar*sin(t*sinfreq)*dd;
     posZ+= sinvar*sin(t*sinfreq)*sqrt(1. - dd*dd);
     #endif
-    
+
     vec3 pos = vec3(posX, posY, posZ);
     return pos;
 }
 
 float nppow(float x, float p)
 {
-    return sign(x)*pow(abs(x), p);   
+    return sign(x)*pow(abs(x), p);
 }
 
 float getSnowProfile(float val, float dist, vec3 fpos, vec3 ray, int flakeNr)
 {
     float val2 = -log(1. - val);
-    
+
     #ifdef star_flakes
     // Complicated stuff to calculate the star shape of the snow flakes by making a 3D to 2D projection
     // From: http://stackoverflow.com/questions/23472048/projecting-3d-points-to-2d-plane
@@ -147,20 +153,20 @@ float getSnowProfile(float val, float dist, vec3 fpos, vec3 ray, int flakeNr)
         float spp = 1. + starStrength*nppow(sin(a*starNbBranches), starPow);
         val2+= 1.3*spp*pow(smoothstep(1.6, 0.1, dist), 2.0);
     }
-    #endif  
-    
+    #endif
+
     float delta = 1.5 - 0.9/pow(dist + 1., 0.3);
     float midpoint = 10./pow(dist + 0.1, 0.3);
     float pr = smoothstep(midpoint - delta*.5, midpoint + delta*.5, val2);
-    
+
     float d = 1. - pow(abs(1. - 2.*pr), 2.);
     float f = 1.3/(pow(dist + .8, 2.5));
-    
+
     #ifdef diffraction
     if (val2<8.)
        pr+= 32.*pow(f, 1.5)*max(0., dist - 2.)*d*(0.5 + sin(val2*230./(3.8 + dist) - midpoint*90.)*0.5);
     #endif
-    
+
     return pr*f*flakeGlobalIntensity;
 }
 
@@ -171,11 +177,11 @@ vec3 getFlakes(vec3 ray)
     float lintensity;
     vec3 fpos;
     float lp;
-    
+
     for (int l=0; l<nbFlakes; l++)
     {
         fpos = getFlakePosition(l, iTime);
-        
+
         float val = max(0.0, dot(ray, normalize(fpos - campos)));
         if (val>0.996)
         {
@@ -186,7 +192,7 @@ vec3 getFlakes(vec3 ray)
 
             // Fog
             lp*= clamp(exp(-pow(fogdens*dist2, 2.)), 0., 1.);
-        
+
             // Flakes appear progressively in the domain along the y axis
             lp*= smoothstep(-flakedomain.y, -flakedomain.y*0.75, fpos.y);
             lp*= smoothstep(flakedomain.y, flakedomain.y*0.75, fpos.y);
@@ -206,7 +212,7 @@ vec3 GetCameraRayDir(vec2 vWindow, vec3 vCameraDir, float fov)
 	vec3 vForward = normalize(vCameraDir);
 	vec3 vRight = normalize(cross(vec3(0.0, 1.0, 0.0), vForward));
 	vec3 vUp = normalize(cross(vForward, vRight));
-    
+
 	vec3 vDir = normalize(vWindow.x * vRight + vWindow.y * vUp + vForward * fov);
 
 	return vDir;
@@ -222,25 +228,25 @@ void setCamera()
       iMouse2 = vec2(0.5, 0.5);
    else
       iMouse2 = iMouse.xy/iResolution.xy;
-   
+
    campos = vec3(8.5, 0., 0.);
    campos.xy = rotateVec(campos.xy, -iMouse2.y*aym + aym*0.5);
    campos.yz = rotateVec(campos.yz, -iMouse2.y*aym + aym*0.5);
    campos.xz = rotateVec(campos.xz, -iMouse2.x*axm);
 
    camtarget = vec3(0.);
-   camdir = camtarget - campos;   
+   camdir = camtarget - campos;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
-{   
+{
     setCamera();
-    
-  	vec2 uv = fragCoord.xy / iResolution.xy; 
+
+  	vec2 uv = fragCoord.xy / iResolution.xy;
   	uv = uv*2.0 - 1.0;
   	uv.x*= iResolution.x / iResolution.y;
   	vec3 ray = GetCameraRayDir(uv, camdir, fov);
-    
+
     vec3 col = sky_color(ray);
     col+= getFlakes(ray);
 

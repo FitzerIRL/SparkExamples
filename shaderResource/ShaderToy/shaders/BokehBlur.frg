@@ -4,26 +4,32 @@
     precision mediump float;
 #endif
 
-uniform vec2  u_resolution;
-uniform float u_time;
+uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
+uniform float       u_time;
+uniform sampler2D   s_noise;
 
 #define iResolution u_resolution
 #define iTime       u_time
+#define iChannel0   s_noise
+
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
+
 const float PI = 3.141592653589;
 
 float cap(vec2 a, vec2 b) {
 	vec2 abd = vec2(a.x*b.x+a.y*b.y, a.y*b.x-a.x*b.y);
 	float y_x = abd.y/(abd.x-1.);
-	
+
 	return atan(-y_x)-y_x/(1.+y_x*y_x)+PI/2.;
 }
 
@@ -35,7 +41,7 @@ float cap1(float p) {
 float ebok(vec2 p, vec2 a, vec2 b) {
 	vec2 an = vec2(a.y,-a.x);
 	vec2 bn = vec2(b.y,-b.x);
-	
+
 	float surface;
 	if (dot(normalize(an),normalize(bn))>.9999) {
 		// This is neccessary to remove dot crawl around corners
@@ -44,11 +50,11 @@ float ebok(vec2 p, vec2 a, vec2 b) {
 		float pa = dot(p,a);
 		float ra = -pa+sqrt(pa*pa-dot(p,p)+1.);
 		vec2 pac = ra*a;
-		
+
 		float pb = dot(p,b);
 		float rb = -pb+sqrt(pb*pb-dot(p,p)+1.);
 		vec2 pbc = rb*b;
-		
+
 		surface = cap(p+pac,p+pbc)+(pac.x*pbc.y-pac.y*pbc.x)*.5;
 	} else {
 		float d1 = dot(an,p);
@@ -56,7 +62,7 @@ float ebok(vec2 p, vec2 a, vec2 b) {
 		float sda = step(dot(p,a),0.);
 		float sdb = step(dot(p,b),0.);
 		surface = PI*(sda+sdb-sda*sdb) - cap1(-d1)*sda - cap1(-d2)*sdb;
-		
+
 	}
 	return surface;
 }
@@ -94,21 +100,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 	float rx = iTime;
 	mat3 matx = mat3(cos(rx),0,sin(rx),0,1,0,-sin(rx),0,cos(rx));
 	mat3 mat = matx;
-	
+
 
 	mat3 rot = mat3(1,0,0,0,.8,.6,0,-.6,.8)*mat3(.96,.28,0,-.28,.96,0,0,0,1);
 
 	vec2 p = ( fragCoord.xy - iResolution.xy*.5 ) / iResolution.x ;
-	
+
 	vec3 color = vec3(0,.2,.7);
-	
+
 	for (float z = -1.; z <= 1.; z++) {
 		for (float x = -1.; x <= 1.; x++) {
 			vec3 q = vec3(x*3.5+z,sin(x*2.+z*2.+iTime),z*-3.5+x);
-			
+
             vec2 mouse = iMouse.xy/iResolution.xy;
 			float scale = 1./(1./(q.z+14.) - 1./(mouse.y*9.-4.5+14.1));
-				
+
 			vec2 a = project(vec3(-1.,1.,-1)*mat+q);
 			vec2 b = project(vec3(1.,1.,-1.)*mat+q);
 			vec2 c = project(vec3(-1.,1.,1.)*mat+q);
@@ -117,15 +123,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 			vec2 f = project(vec3(1.,-1.,-1.)*mat+q);
 			vec2 g = project(vec3(-1.,-1.,1.)*mat+q);
 			vec2 h = project(vec3(1.,-1.,1.)*mat+q);
-			
+
 			float s0 = step(dot(vec3(mat[0][1],mat[1][1],mat[2][1]),q+vec3(0,0,14.)),0.);
 			float s1 = step(0.,dot(vec3(mat[0][2],mat[1][2],mat[2][2]),q+vec3(0,0,14.)));
 			float s2 = step(0.,dot(vec3(mat[0][0],mat[1][0],mat[2][0]),q+vec3(0,0,14.)));
 			float t0 = 1.-s0;
 			float t1 = 1.-s1;
 			float t2 = 1.-s2;
-			
-			vec4 color1 = 
+
+			vec4 color1 =
 				   bokehsquare(p,a*s0+g*t0,b*s0+h*t0,d*s0+f*t0,c*s0+e*t0,scale)*shade(vec3(.7*s0+.3*t0,.5,.5),mat[2][1]*(t0-s0))
 				+  bokehsquare(p,b*s1+h*t1,a*s1+g*t1,e*s1+c*t1,f*s1+d*t1,scale)*shade(vec3(.5,.7*s1+.3*t1,.5),mat[2][2]*(s1-t1))
 				+  bokehsquare(p,a*s2+f*t2,c*s2+h*t2,g*s2+d*t2,e*s2+b*t2,scale)*shade(vec3(.5,.5,.7*s2+.3*t2),mat[2][0]*(s2-t2));
@@ -134,7 +140,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 		}
 	}
 
-	
+
 
 	fragColor = vec4( vec3(sqrt(color)), 1.0 );
 

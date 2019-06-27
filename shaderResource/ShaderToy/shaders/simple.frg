@@ -4,9 +4,9 @@
     precision mediump float;
 #endif
 
-varying vec2        v_uv;
-
 uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
 uniform float       u_time;
 uniform sampler2D   s_noise;
 
@@ -14,7 +14,9 @@ uniform sampler2D   s_noise;
 #define iTime       u_time
 #define iChannel0   s_noise
 
-#define iMouse      vec4(0.,0.,0.,0.)
+// #define fragCoord   gl_FragCoord
+// #define fragColor   gl_FragColor
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }

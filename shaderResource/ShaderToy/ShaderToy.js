@@ -113,19 +113,22 @@ px.import({       scene: 'px:scene.1.js',
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  var shaderToy = null;
+
   function CreateShader(filename)
   {
     var name = filename.split('.').slice(0, -1).join('.')
 
     showCaption(name);
 
-    var shaderToy = scene.create({
+    shaderToy = scene.create({
                  t: 'shaderResource',
           fragment: base + "/shaders/" + filename,
           uniforms:
           {
             "u_time"      : "float",
-            "u_resolution": "vec2"
+            "u_resolution": "vec2",
+            "u_mouse"     : "vec4"
           }
         });
 
@@ -134,6 +137,22 @@ px.import({       scene: 'px:scene.1.js',
       rect.effect = shaderToy;
     });
   };
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  rect.on('onMouseDrag',  (e) =>
+  {
+      console.log(" onMouseDrag >>> x: " + e.x + "  y: " + e.y);
+
+      rect.effect =
+      {
+          name: "Mouse",
+        shader: shaderToy,
+      uniforms: {
+                  u_mouse:    [e.x, e.y, 0, 0]
+                }
+      };
+  });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -148,7 +167,7 @@ px.import({       scene: 'px:scene.1.js',
 
       scene.collectGarbage(); //DEBUG
 
-      Message.text = (paused ? "PAUSED ++" : "Unpaused ++");
+      Message.text = (paused ? "PAUSED" : "Unpaused");
       showHide( MessageBG );
     }
     else

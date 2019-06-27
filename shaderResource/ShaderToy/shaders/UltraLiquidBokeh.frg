@@ -4,19 +4,25 @@
     precision mediump float;
 #endif
 
-uniform vec2  u_resolution;
-uniform float u_time;
+uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
+uniform float       u_time;
+uniform sampler2D   s_noise;
 
 #define iResolution u_resolution
 #define iTime       u_time
+#define iChannel0   s_noise
+
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
 // Created by inigo quilez - iq/2013 : https://www.shadertoy.com/view/4dl3zn
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 // Messed up by Weyland

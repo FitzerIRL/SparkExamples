@@ -5,6 +5,8 @@
 #endif
 
 uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
 uniform float       u_time;
 uniform sampler2D   s_noise;
 
@@ -14,15 +16,13 @@ uniform sampler2D   s_noise;
 
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-
-#define texture   texture2D
-
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
 /*--------------------------------------------------------------------------------------
 License CC0 - http://creativecommons.org/publicdomain/zero/1.0/
 To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.

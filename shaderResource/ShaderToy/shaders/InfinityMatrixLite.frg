@@ -5,6 +5,8 @@
 #endif
 
 uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
 uniform float       u_time;
 uniform sampler2D   s_noise;
 
@@ -14,16 +16,13 @@ uniform sampler2D   s_noise;
 
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
 void mainImage(out vec4, in vec2);
 void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-
-#define texture      texture2D
-#define textureLod   texture2D
-
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////////////////////////////
 // Infinity Matrix - Copyright 2017 Frank Force
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.

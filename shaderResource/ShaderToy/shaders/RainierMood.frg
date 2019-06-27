@@ -5,24 +5,24 @@
 #endif
 
 uniform vec2        u_resolution;
+uniform vec4        u_mouse;
+
 uniform float       u_time;
-uniform sampler2D   s_texture;
+uniform sampler2D   s_noise;
 
 #define iResolution u_resolution
 #define iTime       u_time
-#define iChannel0   s_texture
+#define iChannel0   s_noise
 
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
-#define iMouse      vec4(0.,0.,0.,0.)
+#define iMouse      u_mouse
 
-// void mainImage(out vec4, in vec2);
-// void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-
-#define texture   texture2D
-
+void mainImage(out vec4, in vec2);
+void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
+
 
 
 // http://www.pouet.net/prod.php?which=57245
