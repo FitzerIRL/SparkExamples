@@ -105,7 +105,8 @@ px.import({       scene: 'px:scene.1.js'
 
   var bg    = scene.create({ t: 'rect',  parent: root, x: bb, y: bb, w: (scene.w - b2), h: (scene.h - b2), fillColor: '#111', interactive: true});
 
-  var title = scene.create({t:'textBox', w: bg.w, h: 50, parent: bg, x: 0, y: 30,
+  var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2, y: 60, w: 500 + 20, h: 50+ 20, px: 0.5, py: 0.5 });
+  var title     = scene.create({ t: 'textBox', parent: title_obj, x: 0,      y: 10, w: 500,      h: 50,
                       pixelSize: 60, textColor: '#aaa', text:  'Blur Shader Tests', interactive: false,
                       alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
@@ -131,7 +132,6 @@ px.import({       scene: 'px:scene.1.js'
 
   function onPercent2(pc) { doImageBlur(image, pc); }
   var slider2     = new slider(image_obj, onPercent2, image_obj.w/2, image_obj.h - bb, 300, 20, 0.5, 1.0);
-
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //
@@ -169,6 +169,33 @@ px.import({       scene: 'px:scene.1.js'
                               } });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  
+  var titleBlurDX = 1.0;
+  var titleBlurPC = 0.0;
+
+  var timer = setInterval( () =>
+  {
+    var max_val = 50;
+
+    titleBlurPC += (0.5 * titleBlurDX);
+
+    if(titleBlurDX > 0 && titleBlurPC > max_val)
+    {
+      titleBlurPC = max_val;
+      titleBlurDX = -1;
+    }
+    else
+    if(titleBlurDX < 0 && titleBlurPC < 0.0)
+    {
+      titleBlurPC = 0;
+      titleBlurDX = 1;
+    }
+
+    doImageBlur(title_obj, titleBlurPC);
+
+  }, 10);
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   function doImageBlur(obj, pc)
   {
@@ -195,7 +222,7 @@ px.import({       scene: 'px:scene.1.js'
       }
     ];
 
-    console.log("obj.id: " + obj.id + "  pc: " + pc +  "%  BLURRED !!!");
+  // console.log("obj.id: " + obj.id + "  pc: " + pc +  "%  BLURRED !!!");
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
