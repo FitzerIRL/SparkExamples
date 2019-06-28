@@ -205,7 +205,7 @@ px.import({       scene: 'px:scene.1.js'
     var blurAmount   = pc / 30.0;
     var kernelRadius = Math.max(1, blurAmount /4);
 
-    var blurFactor = [1.00, 1.25, 1.50, 1.75];
+    var blurFactor = [1.00, 1.25, 1.50, 1.75, 2.0];
     var blurArray  = [];
 
     // Create SHADER config for "gaussian" blur - kinda ... (looks good)
