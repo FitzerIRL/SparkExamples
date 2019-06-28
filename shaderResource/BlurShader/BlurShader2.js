@@ -105,8 +105,8 @@ px.import({       scene: 'px:scene.1.js'
 
   var bg    = scene.create({ t: 'rect',  parent: root, x: bb, y: bb, w: (scene.w - b2), h: (scene.h - b2), fillColor: '#111', interactive: true});
 
-  var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2, y: 60, w: 500 + 20, h: 50+ 20, px: 0.5, py: 0.5 });
-  var title     = scene.create({ t: 'textBox', parent: title_obj, x: 0,      y: 10, w: 500,      h: 50,
+  var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2,        y: 100,           w: 500 + 80, h: 50+ 80, px: 0.5, py: 0.5 });
+  var title     = scene.create({ t: 'textBox', parent: title_obj, x: title_obj.w/2, y: title_obj.h/2, w: 500,      h: 50+ 80, px: 0.5, py: 0.5,
                       pixelSize: 60, textColor: '#aaa', text:  'Blur Shader Tests', interactive: false,
                       alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
@@ -169,7 +169,7 @@ px.import({       scene: 'px:scene.1.js'
                               } });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  
+
   var titleBlurDX = 1.0;
   var titleBlurPC = 0.0;
 
@@ -202,27 +202,35 @@ px.import({       scene: 'px:scene.1.js'
     var blurAmount   = pc / 30.0;
     var kernelRadius = Math.max(1, blurAmount /4);
 
-    obj.effect =
-    [
-      {
-          name: "Pass 1",
-        shader: blurShader,
-      uniforms: {
-                  u_kernelRadius: kernelRadius,
-                  u_direction:    [blurAmount, 0]  // HORIZONTAL
-                }
-      },
-      {
-          name: "Pass 2",
-        shader: blurShader,
-      uniforms: {
-                  u_kernelRadius: kernelRadius,
-                  u_direction:    [0, blurAmount]  // VERTICAL
-                }
-      }
-    ];
+    var blurFactor = [1.00, 1.25, 1.50, 1.75];
+    var blurArray  = [];
 
-  // console.log("obj.id: " + obj.id + "  pc: " + pc +  "%  BLURRED !!!");
+    // Create SHADER config for "gaussian" blur - kinda ... (looks good)
+    //
+    blurFactor.map(f =>
+    {
+      blurArray.push(
+      {
+            name: "Pass 1",
+          shader: blurShader,
+        uniforms: {
+                    u_kernelRadius: kernelRadius * f,
+                    u_direction:    [blurAmount  * f, 0]  // HORIZONTAL
+                  }
+      });
+
+      blurArray.push(
+      {
+            name: "Pass 2",
+          shader: blurShader,
+        uniforms: {
+                    u_kernelRadius:     kernelRadius * f,
+                    u_direction:    [0, blurAmount   * f]  // VERTICAL
+                  }
+      });
+    });
+
+      obj.effect = blurArray;
   }
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
