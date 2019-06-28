@@ -105,8 +105,8 @@ px.import({       scene: 'px:scene.1.js'
 
   var bg    = scene.create({ t: 'rect',  parent: root, x: bb, y: bb, w: (scene.w - b2), h: (scene.h - b2), fillColor: '#111', interactive: true});
 
-  var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2,        y: 100,           w: 500 + 80, h: 50+ 80, px: 0.5, py: 0.5 });
-  var title     = scene.create({ t: 'textBox', parent: title_obj, x: title_obj.w/2, y: title_obj.h/2, w: 500,      h: 50+ 80, px: 0.5, py: 0.5,
+  var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2, y: 100, w: 500 + 80,    h: 50+ 80, px: 0.5, py: 0.5 });
+  var title     = scene.create({ t: 'textBox', parent: title_obj, x: 0,      y:   0, w: title_obj.w, h: title_obj.h,
                       pixelSize: 60, textColor: '#aaa', text:  'Blur Shader Tests', interactive: false,
                       alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
@@ -116,11 +116,14 @@ px.import({       scene: 'px:scene.1.js'
   // Create TEXT + BLUR Slider
   //
 
-  var text_obj    = scene.create({ t: 'rect', parent:       bg, x: x1,           y: y1, w:  w2,        h: 120, px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
-  var text        = scene.create({ t: 'text', parent: text_obj, x: text_obj.w/2, y: 20, w: text_obj.w, h: 100, px: 0.5, py: 0.0,
-                                      pixelSize: 44, textColor:'#fff', text:  'Blurring', interactive: false, id: "testText1" });
+  var text_obj    = scene.create({ t: 'rect',   parent:        bg, x: x1, y: y1,  w: w2,        h: 120, px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000", interactive: false });
+  var text_blur   = scene.create({ t: 'object', parent:        bg, x: x1, y: y1,  w: w2 + 100,  h: 120, px: 0.5, py: 0.5, interactive: false });
+  var text        = scene.create({ t: 'textBox', parent: text_blur, x: 0, y: 0,   w: text_blur.w, h: text_blur.h,
+                      pixelSize: 44, textColor: '#aaa', text:  'Blurring', interactive: false,
+                      alignVertical:   scene.alignVertical.CENTER,
+                      alignHorizontal: scene.alignHorizontal.CENTER});
 
-  function onPercent1(pc) { doImageBlur(text, pc); }
+  function onPercent1(pc) { doImageBlur(text_blur, pc); }
   var slider1     = new slider(text_obj, onPercent1, text_obj.w/2, text_obj.h - bb, 300, 20, 0.5, 1.0);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -137,9 +140,9 @@ px.import({       scene: 'px:scene.1.js'
   //
   // Create RECT + BLUR Slider
   //
-  var rect_obj    = scene.create({ t: 'rect',   parent:       bg, x: x2,   y: y1, w: w2,    h: 120,    px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
-  var rect        = scene.create({ t: 'object', parent: rect_obj, x: w2/2, y: bb, w: w1,    h:  60,    px: 0.5, py: 0.0,                       interactive: false });
-  var rect_fill   = scene.create({ t: 'rect',   parent:     rect, x: bb,   y: bb, w: w1-20, h:  60-20, px: 0.0, py: 0.0, fillColor: "#ffA500", interactive: false });
+  var rect_obj    = scene.create({ t: 'rect',   parent:       bg, x: x2,   y: y1,   w: w2,    h: 120,    px: 0.5, py: 0.5, lineColor: "#444", lineWidth: lw, fillColor: "#0000" });
+  var rect        = scene.create({ t: 'object', parent: rect_obj, x: w2/2, y: bb-5,   w: w1+40, h:  60+20, px: 0.5, py: 0.0,                       interactive: false });
+  var rect_fill   = scene.create({ t: 'rect',   parent:     rect, x: rect.w/2, y:rect.h/2, w: w1-35, h:  60-35, px: 0.5, py: 0.5, fillColor: "#ffA500", interactive: false });
 
   function onPercent3(pc) { doImageBlur(rect, pc); }
   var slider3     = new slider(rect_obj, onPercent3, rect_obj.w/2, rect_obj.h - bb, 300, b2, 0.5, 1.0);
