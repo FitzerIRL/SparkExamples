@@ -8,11 +8,11 @@ uniform vec2        u_resolution;
 uniform vec4        u_mouse;
 
 uniform float       u_time;
-uniform sampler2D   s_noise;
+uniform sampler2D   s_texture;
 
 #define iResolution u_resolution
 #define iTime       u_time
-#define iChannel0   s_noise
+#define iChannel0   s_texture
 
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor

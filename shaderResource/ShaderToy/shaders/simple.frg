@@ -8,11 +8,11 @@ uniform vec2        u_resolution;
 uniform vec4        u_mouse;
 
 uniform float       u_time;
-uniform sampler2D   s_noise;
+uniform sampler2D   s_texture;
 
 #define iResolution u_resolution
 #define iTime       u_time
-#define iChannel0   s_noise
+#define iChannel0   s_texture
 
 // #define fragCoord   gl_FragCoord
 // #define fragColor   gl_FragColor
@@ -29,7 +29,7 @@ void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-  vec4 px = texture2D(s_noise, v_uv);
+  vec4 px = texture2D(s_texture, v_uv);
 
 	fragColor = px + vec4(v_uv.x, v_uv.y, 0.2, 0.015);
 }

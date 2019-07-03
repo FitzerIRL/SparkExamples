@@ -79,7 +79,7 @@ px.import({       scene: 'px:scene.1.js'
     //       blurAmount  += 0.1;
     //       kernelRadius = Math.max(1, blurAmount /4);
 
-    blurAmount   = 50;
+    blurAmount   = 10.5;
     kernelRadius = Math.max(1, blurAmount /4);
 
     screenshot.effect =

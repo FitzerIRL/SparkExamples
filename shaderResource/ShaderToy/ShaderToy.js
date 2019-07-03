@@ -23,15 +23,19 @@ px.import({       scene: 'px:scene.1.js',
 
   var noiseGRAY = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
   var noiseRGBA = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
+  var lichen    = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/lichen.jpg" });
 
-  // var img = scene.create({ t: 'image', parent: root, resource: noise, x: 0, y: 0, interactive: false });
+//  var img = scene.create({ t: 'image', parent: root, resource: lichen, x: 0, y: 0, interactive: false });
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   var rect = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
-
-  var foo = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
+  var fooRGBA = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
+  var fooGRAY = scene.create({ t: 'image', parent: rect, resource: noiseGRAY, x: 0, y: 0, interactive: false, a: 0.01 });
 
   var toys = [
+      "PlanetShadertoy.frg",
+      "TheHomeDrive.frg",
+      "FlowOfCells.frg",
       "GeodesicTiling.frg",
       "FluxCore.frg",
       // "InsideTheMatrix.frg",  // ES 3.0 :(
@@ -67,16 +71,14 @@ px.import({       scene: 'px:scene.1.js',
       // "InversionMachine.frg", // IFFY
       "DiskIntersection.frg",
       "CubesAndSpheres.frg",
+      "SeascapeSailing.frg",
+      "InversionMachine.frg",
 
-    // { filename: "ExplosionEffect.frg",   texture0: noiseRGBA },
-    { filename: "SeascapeSailing.frg",   texture0: noiseRGBA },
-    { filename: "InversionMachine.frg",  texture0: noiseRGBA },
+//    { filename: "ExplosionEffect.frg",   texture0: noiseRGBA },
+
+    { filename: "Clouds.frg",        texture0: noiseRGBA },
     { filename: "Generators.frg",        texture0: noiseRGBA },
-    // "DigitalBrain.frg",
-    // "DiskIntersection.frg",
-    // "CubesAndSpheres.frg",
-    // "Clouds.frg",
-    // "Generators.frg",
+//    { filename: "DigitalBrain.frg",      texture0: noiseRGBA },
     { filename: "2DClouds.frg",        texture0: noiseRGBA },
     { filename: "Oceanic.frg",         texture0: noiseGRAY },
     { filename: "RainierMood.frg",     texture0: noiseRGBA }
@@ -85,13 +87,13 @@ px.import({       scene: 'px:scene.1.js',
   var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w, h: 40, a: 0});
   var Caption   = scene.create({ t: 'textBox', w: rect.w, h: 40, parent: CaptionBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
-                      alignVertical:   scene.alignVertical.CENTER, 
+                      alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
 
   var MessageBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: 10, y: 10, w: 120, h: 40, a: 0});
   var Message   = scene.create({ t: 'textBox', w: 120, h: 40, parent: MessageBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
-                      alignVertical:   scene.alignVertical.CENTER, 
+                      alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -162,14 +164,19 @@ px.import({       scene: 'px:scene.1.js',
 
     shaderToy.ready.then( () =>
     {
-      rect.effect =
+      var config =
       {
-          name: "shaderToy",
+        name:  "shaderToy",
         shader: shaderToy,
-      uniforms: [
-        texture0 ? { s_texture: texture0 } : {}
-                ]
+        uniforms: {}
       };
+
+      if(texture0)
+      {
+        config.uniforms = { s_texture: texture0 };
+      }
+
+      rect.effect = config;
     });
   };
 
@@ -182,7 +189,7 @@ px.import({       scene: 'px:scene.1.js',
           name: "Mouse",
         shader: shaderToy,
       uniforms: {
-                  u_mouse:    [e.x, e.y, 0, 0]
+                  u_mouse: [e.x, e.y, 0, 0]
                 }
       };
   });
@@ -296,5 +303,5 @@ px.import({       scene: 'px:scene.1.js',
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 }).catch(function importFailed(err) {
-  console.error('Import for ShaderToy2.js failed: ' + err);
+  console.error('Import for ShaderToy.js failed: ' + err);
 });

@@ -46,6 +46,7 @@ vec4 blur5(sampler2D image, vec2 uv, vec2 resolution, vec2 direction)
 
 void main()
 {
+#if 1
   if (u_kernelRadius == 1)
   {
     gl_FragColor = blur5(s_texture, v_uv, u_resolution, u_direction);
@@ -58,6 +59,17 @@ void main()
   {
       gl_FragColor = blur13(s_texture, v_uv, u_resolution, u_direction);
   }
+
+  // gl_FragColor = vec4(gl_FragColor.r * gl_FragColor.a,
+  //                     gl_FragColor.g * gl_FragColor.a,
+  //                     gl_FragColor.b * gl_FragColor.a,
+  //                     gl_FragColor.a );
+#else
+
+  vec4      px = texture2D(s_texture, v_uv);
+  gl_FragColor = vec4((px.a > 0.5) ? 1.0 : 0.0, 0.0, 0.0, px.a);
+
+#endif
 
 //  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // JUNK
 }
