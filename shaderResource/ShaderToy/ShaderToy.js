@@ -9,7 +9,7 @@ px.import({       scene: 'px:scene.1.js',
 
   var hasShaders    = true;
   var intervalTimer = null;
-  var index         = 0;
+  var index         = -1;
 
   if( scene.capabilities                  == undefined ||
       scene.capabilities.graphics         == undefined ||
@@ -136,9 +136,9 @@ px.import({       scene: 'px:scene.1.js',
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  function showCaption(txt, x = 0.5, y = (rect.h - 50) )
+  function showCaption(index, txt, x = 0.5, y = (rect.h - 50) )
   {
-    Caption.text = txt;
+    Caption.text = (index + 1) + ". " + txt;
 
     Caption.ready.then( () =>
     {
@@ -178,7 +178,7 @@ px.import({       scene: 'px:scene.1.js',
 
     var name = filename.split('.').slice(0, -1).join('.')
 
-    showCaption(name);
+    showCaption(index, name);
 
     var fileLoadPromise = px.getModuleFile("/shaders/" + filename);
     fileLoadPromise.then(function(shader)
@@ -281,8 +281,8 @@ px.import({       scene: 'px:scene.1.js',
     if(index >= toys.length )
       index = 0; // WRAP
 
-    ResetInterval();
     LoadShader(toys[index]);
+    ResetInterval();
   }
 
   function PrevShader()
@@ -291,8 +291,8 @@ px.import({       scene: 'px:scene.1.js',
     if(index < 0 )
       index = toys.length - 1; // WRAP
 
-    ResetInterval();
     LoadShader(toys[index]);
+    ResetInterval();
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -309,8 +309,6 @@ px.import({       scene: 'px:scene.1.js',
       if(paused == false)
       {
         NextShader();
-
-  //      console.log("Shader Index: " + index);
       }
     }, 4000);
   }
@@ -321,8 +319,7 @@ px.import({       scene: 'px:scene.1.js',
 
     if(hasShaders == true)
     {
-      LoadShader(toys[index++]);
-
+      NextShader();
       ResetInterval();
     }
   });
