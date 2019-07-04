@@ -1,32 +1,3 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
-
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
-
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -46,7 +17,7 @@ vec4 taylorInvSqrt(vec4 r)
 }
 
 float snoise(vec3 v)
-  { 
+  {
   const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
   const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
@@ -69,10 +40,10 @@ float snoise(vec3 v)
   vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
 
 // Permutations
-  i = mod289(i); 
-  vec4 p = permute( permute( permute( 
+  i = mod289(i);
+  vec4 p = permute( permute( permute(
              i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-           + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+           + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
 
 // Gradients: 7x7 points over a square, mapped onto an octahedron.
@@ -116,7 +87,7 @@ float snoise(vec3 v)
 // Mix final noise value
   vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
   m = m * m;
-  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
                                 dot(p2,x2), dot(p3,x3) ) );
   }
 
@@ -126,7 +97,7 @@ float normnoise(float noise) {
 
 float clouds(vec2 uv) {
     uv += vec2(iTime*0.05, + iTime*0.01);
-    
+
     vec2 off1 = vec2(50.0,33.0);
     vec2 off2 = vec2(0.0, 0.0);
     vec2 off3 = vec2(-300.0, 50.0);
@@ -139,7 +110,7 @@ float clouds(vec2 uv) {
     float scale4 = 24.0;
     float scale5 = 48.0;
     float scale6 = 96.0;
-    return normnoise(snoise(vec3((uv+off1)*scale1,iTime*0.5))*0.8 + 
+    return normnoise(snoise(vec3((uv+off1)*scale1,iTime*0.5))*0.8 +
                      snoise(vec3((uv+off2)*scale2,iTime*0.4))*0.4 +
                      snoise(vec3((uv+off3)*scale3,iTime*0.1))*0.2 +
                      snoise(vec3((uv+off4)*scale4,iTime*0.7))*0.1 +
@@ -150,33 +121,33 @@ float clouds(vec2 uv) {
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-  
+
 	vec2 uv =  fragCoord.xy/iResolution.x;
-    
+
     vec2 center = vec2(0.5,0.5*(iResolution.y/iResolution.x));
-    
+
     vec2 light1 = vec2(sin(iTime*1.2+50.0)*1.0 + cos(iTime*0.4+10.0)*0.6,sin(iTime*1.2+100.0)*0.8 + cos(iTime*0.2+20.0)*-0.2)*0.2+center;
     vec3 lightColor1 = vec3(1.0, 0.3, 0.3);
-    
+
     vec2 light2 = vec2(sin(iTime+3.0)*-2.0,cos(iTime+7.0)*1.0)*0.2+center;
     vec3 lightColor2 = vec3(0.3, 1.0, 0.3);
-    
+
     vec2 light3 = vec2(sin(iTime+3.0)*2.0,cos(iTime+14.0)*-1.0)*0.2+center;
     vec3 lightColor3 = vec3(0.3, 0.3, 1.0);
 
-    
+
     float cloudIntensity1 = 0.7*(1.0-(2.5*distance(uv, light1)));
     float lighIntensity1 = 1.0/(100.0*distance(uv,light1));
 
     float cloudIntensity2 = 0.7*(1.0-(2.5*distance(uv, light2)));
     float lighIntensity2 = 1.0/(100.0*distance(uv,light2));
-    
+
     float cloudIntensity3 = 0.7*(1.0-(2.5*distance(uv, light3)));
     float lighIntensity3 = 1.0/(100.0*distance(uv,light3));
-    
-    
+
+
 	fragColor = vec4(vec3(cloudIntensity1*clouds(uv))*lightColor1 + lighIntensity1*lightColor1 +
                      vec3(cloudIntensity2*clouds(uv))*lightColor2 + lighIntensity2*lightColor2 +
-                     vec3(cloudIntensity3*clouds(uv))*lightColor3 + lighIntensity3*lightColor3 
+                     vec3(cloudIntensity3*clouds(uv))*lightColor3 + lighIntensity3*lightColor3
                      ,1.0);
 }

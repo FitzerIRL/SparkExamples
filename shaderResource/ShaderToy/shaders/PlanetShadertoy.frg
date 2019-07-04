@@ -1,31 +1,3 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
-
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
 // Planet Shadertoy. Created by Reinder Nijhoff 2015
 // @reindernijhoff
 //
@@ -55,7 +27,7 @@ const float RING_HEIGHT = 2.;
     const int   ASTEROID_NUM_STEPS = 11;
 	const int	ASTEROID_NUM_BOOL_SUB = 7;
     const int   RING_VOXEL_STEPS = 25;
-    const float ASTEROID_MAX_DISTANCE = 1.1; 
+    const float ASTEROID_MAX_DISTANCE = 1.1;
 	const int   FBM_STEPS = 4;
     const int   ATMOSPHERE_NUM_OUT_SCATTER = 5;
     const int   ATMOSPHERE_NUM_IN_SCATTER = 7;
@@ -72,7 +44,7 @@ const float RING_HEIGHT = 2.;
     const int   ASTEROID_NUM_STEPS = 10;
 	const int	ASTEROID_NUM_BOOL_SUB = 6;
     const int   RING_VOXEL_STEPS = 24;
-    const float ASTEROID_MAX_DISTANCE = 1.; 
+    const float ASTEROID_MAX_DISTANCE = 1.;
 	const int   FBM_STEPS = 4;
     const int   ATMOSPHERE_NUM_OUT_SCATTER = 4;
     const int   ATMOSPHERE_NUM_IN_SCATTER = 6;
@@ -87,7 +59,7 @@ const float RING_HEIGHT = 2.;
     const int   ASTEROID_NUM_STEPS = 9;
 	const int	ASTEROID_NUM_BOOL_SUB = 5;
     const int   RING_VOXEL_STEPS = 20;
-    const float ASTEROID_MAX_DISTANCE = .85; 
+    const float ASTEROID_MAX_DISTANCE = .85;
 	const int   FBM_STEPS = 3;
     const int   ATMOSPHERE_NUM_OUT_SCATTER = 3;
     const int   ATMOSPHERE_NUM_IN_SCATTER = 5;
@@ -99,7 +71,7 @@ const float RING_HEIGHT = 2.;
     const int   ASTEROID_NUM_STEPS = 7;
 	const int	ASTEROID_NUM_BOOL_SUB = 4;
     const int   RING_VOXEL_STEPS = 16;
-    const float ASTEROID_MAX_DISTANCE = .67; 
+    const float ASTEROID_MAX_DISTANCE = .67;
 	const int   FBM_STEPS = 3;
     const int   ATMOSPHERE_NUM_OUT_SCATTER = 2;
     const int   ATMOSPHERE_NUM_IN_SCATTER = 4;
@@ -119,35 +91,35 @@ float hash( const in float n ) {
     return fract(sin(n)*43758.5453123);
 }
 float hash( const in vec2 p ) {
-	float h = dot(p,vec2(127.1,311.7));	
+	float h = dot(p,vec2(127.1,311.7));
     return fract(sin(h)*43758.5453123);
 }
 float hash( const in vec3 p ) {
-	float h = dot(p,vec3(127.1,311.7,758.5453123));	
+	float h = dot(p,vec3(127.1,311.7,758.5453123));
     return fract(sin(h)*43758.5453123);
 }
 vec3 hash31( const in float p) {
-	vec3 h = vec3(1275.231,4461.7,7182.423) * p;	
+	vec3 h = vec3(1275.231,4461.7,7182.423) * p;
     return fract(sin(h)*43758.543123);
 }
 vec3 hash33( const in vec3 p) {
     return vec3( hash(p), hash(p.zyx), hash(p.yxz) );
 }
 
-float noise( const in  float p ) {    
+float noise( const in  float p ) {
     float i = floor( p );
-    float f = fract( p );	
+    float f = fract( p );
 	float u = f*f*(3.0-2.0*f);
     return -1.0+2.0* mix( hash( i + 0. ), hash( i + 1. ), u);
 }
 
-float noise( const in  vec2 p ) {    
+float noise( const in  vec2 p ) {
     vec2 i = floor( p );
-    vec2 f = fract( p );	
+    vec2 f = fract( p );
 	vec2 u = f*f*(3.0-2.0*f);
-    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), 
+    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ),
                      hash( i + vec2(1.0,0.0) ), u.x),
-                mix( hash( i + vec2(0.0,1.0) ), 
+                mix( hash( i + vec2(0.0,1.0) ),
                      hash( i + vec2(1.0,1.0) ), u.x), u.y);
 }
 float noise( const in  vec3 x ) {
@@ -163,7 +135,7 @@ float noise( const in  vec3 x ) {
 
 float tri( const in vec2 p ) {
     return 0.5*(cos(6.2831*p.x) + cos(6.2831*p.y));
-   
+
 }
 
 const mat2 m2 = mat2( 0.80, -0.60, 0.60, 0.80 );
@@ -172,8 +144,8 @@ float fbm( in vec2 p ) {
     float f = 0.0;
     f += 0.5000*noise( p ); p = m2*p*2.02;
     f += 0.2500*noise( p ); p = m2*p*2.03;
-    f += 0.1250*noise( p ); 
-    
+    f += 0.1250*noise( p );
+
 #ifndef LOW_QUALITY
 #ifndef VERY_LOW_QUALITY
     p = m2*p*2.01;
@@ -184,7 +156,7 @@ float fbm( in vec2 p ) {
 }
 
 float fbm( const in vec3 p, const in float a, const in float f) {
-    float ret = 0.0;    
+    float ret = 0.0;
     float amp = 1.0;
     float frq = 1.0;
     for(int i = 0; i < FBM_STEPS; i++) {
@@ -200,11 +172,11 @@ float fbm( const in vec3 p, const in float a, const in float f) {
 // Lightning functions
 //-----------------------------------------------------
 
-float diffuse( const in vec3 n, const in vec3 l) { 
+float diffuse( const in vec3 n, const in vec3 l) {
     return clamp(dot(n,l),0.,1.);
 }
 
-float specular( const in vec3 n, const in vec3 l, const in vec3 e, const in float s) {    
+float specular( const in vec3 n, const in vec3 l, const in vec3 e, const in float s) {
     float nrm = (s + 8.0) / (3.1415 * 8.0);
     return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
 }
@@ -221,8 +193,8 @@ vec2 rotate(float angle, vec2 v) {
     return vec2(cos(angle) * v.x + sin(angle) * v.y, cos(angle) * v.y - sin(angle) * v.x);
 }
 
-float boolSub(float a,float b) { 
-    return max(a,-b); 
+float boolSub(float a,float b) {
+    return max(a,-b);
 }
 float sphere(vec3 p,float r) {
 	return length(p)-r;
@@ -272,7 +244,7 @@ float iPlane( in vec3 ro, in vec3 rd, in vec4 pla ) {
 
 //-----------------------------------------------------
 // Wet stone by TDM
-// 
+//
 // https://www.shadertoy.com/view/ldSSzV
 //-----------------------------------------------------
 
@@ -284,13 +256,13 @@ const float ASTEROID_RADIUS = 0.13;
 const vec3  RING_COLOR_1 = vec3(0.42,0.3,0.2);
 const vec3  RING_COLOR_2 = vec3(0.41,0.51,0.52);
 
-float asteroidRock( const in vec3 p, const in vec3 id ) {  
-    float d = sphere(p,ASTEROID_RADIUS);    
+float asteroidRock( const in vec3 p, const in vec3 id ) {
+    float d = sphere(p,ASTEROID_RADIUS);
     for(int i = 0; i < ASTEROID_NUM_BOOL_SUB; i++) {
         float ii = float(i)+id.x;
         float r = (ASTEROID_RADIUS*2.5) + ASTEROID_RADIUS*hash(ii);
         vec3 v = normalize(hash31(ii) * 2.0 - 1.0);
-    	d = boolSub(d,sphere(p+v*r,r * 0.8));       
+    	d = boolSub(d,sphere(p+v*r,r * 0.8));
     }
     return d;
 }
@@ -308,7 +280,7 @@ float asteroidMapDetailed( const in vec3 p, const in vec3 id) {
 void asteroidTransForm(inout vec3 ro, const in vec3 id ) {
     float xyangle = (id.x-.5)*time*2.;
     ro.xy = rotate( xyangle, ro.xy );
-    
+
     float yzangle = (id.y-.5)*time*2.;
     ro.yz = rotate( yzangle, ro.yz );
 }
@@ -318,18 +290,18 @@ void asteroidUnTransForm(inout vec3 ro, const in vec3 id ) {
     ro.yz = rotate( -yzangle, ro.yz );
 
     float xyangle = (id.x-.5)*time*2.;
-    ro.xy = rotate( -xyangle, ro.xy );  
+    ro.xy = rotate( -xyangle, ro.xy );
 }
 
 vec3 asteroidGetNormal(vec3 p, vec3 id) {
     asteroidTransForm( p, id );
-    
+
     vec3 n;
     n.x = asteroidMapDetailed(vec3(p.x+ASTEROID_EPSILON,p.y,p.z), id);
     n.y = asteroidMapDetailed(vec3(p.x,p.y+ASTEROID_EPSILON,p.z), id);
     n.z = asteroidMapDetailed(vec3(p.x,p.y,p.z+ASTEROID_EPSILON), id);
     n = normalize(n-asteroidMapDetailed(p, id));
-    
+
     asteroidUnTransForm( n, id );
     return n;
 }
@@ -337,7 +309,7 @@ vec3 asteroidGetNormal(vec3 p, vec3 id) {
 vec2 asteroidSpheretracing(vec3 ori, vec3 dir, vec3 id) {
     asteroidTransForm( ori, id );
     asteroidTransForm( dir, id );
-    
+
     vec2 td = vec2(0,1);
     for(int i = 0; i < ASTEROID_NUM_STEPS && abs(td.y) > ASTEROID_TRESHOLD; i++) {
         td.y = asteroidMap(ori + dir * td.x, id);
@@ -347,7 +319,7 @@ vec2 asteroidSpheretracing(vec3 ori, vec3 dir, vec3 id) {
 }
 
 vec3 asteroidGetStoneColor(vec3 p, float c, vec3 l, vec3 n, vec3 e) {
-	return mix( diffuse(n,l)*RING_COLOR_1*SUN_COLOR, SUN_COLOR*specular(n,l,e,3.0), .5*fresnel(n,e,5.));    
+	return mix( diffuse(n,l)*RING_COLOR_1*SUN_COLOR, SUN_COLOR*specular(n,l,e,3.0), .5*fresnel(n,e,5.));
 }
 
 //-----------------------------------------------------
@@ -368,13 +340,13 @@ bool ringMap( const in vec3 ro ) {
     return ro.z < RING_HEIGHT/RING_VOXEL_STEP_SIZE && hash(ro)<.5;
 }
 
-vec4 renderRingNear( const in vec3 ro, const in vec3 rd ) { 
-// find startpoint 
+vec4 renderRingNear( const in vec3 ro, const in vec3 rd ) {
+// find startpoint
     float d1 = iPlane( ro, rd, vec4( 0., 0., 1., RING_HEIGHT ) );
     float d2 = iPlane( ro, rd, vec4( 0., 0., 1., -RING_HEIGHT ) );
-    
+
     float d = min( max(d1,0.), max(d2,0.) );
-   
+
     if( (d1 < 0. && d2 < 0.) || d > ASTEROID_MAX_DISTANCE ) {
         return vec4( 0. );
     } else {
@@ -408,7 +380,7 @@ vec4 renderRingNear( const in vec3 ro, const in vec3 rd ) {
 
                     if( asteroid.y < .1 ) {
                         alpha = 1.;
-                        break;	    
+                        break;
                     }
                 }
 
@@ -418,7 +390,7 @@ vec4 renderRingNear( const in vec3 ro, const in vec3 rd ) {
             pos += mm * rs;
         }
 
-        if( alpha > 0. ) {       
+        if( alpha > 0. ) {
             vec3 intersection = ros + rd*(asteroid.x+dint);
             vec3 n = asteroidGetNormal( asteroidro + rd*asteroid.x, id );
 
@@ -442,11 +414,11 @@ vec4 renderRingNear( const in vec3 ro, const in vec3 rd ) {
 float renderRingFarShadow( const in vec3 ro, const in vec3 rd ) {
     // intersect plane
     float d = iPlane( ro, rd, vec4( 0., 0., 1., 0.) );
-    
+
     if( d > 0. ) {
 	    vec3 intersection = ro + rd*d;
         float l = length(intersection.xy);
-        
+
         if( l > RING_INNER_RADIUS && l < RING_OUTER_RADIUS ) {
             return .5 + .5 * (.2+.8*noise( l*.07 )) * (.5+.5*noise(intersection.xy));
         } else {
@@ -460,16 +432,16 @@ float renderRingFarShadow( const in vec3 ro, const in vec3 rd ) {
 vec4 renderRingFar( const in vec3 ro, const in vec3 rd, inout float maxd ) {
     // intersect plane
     float d = iPlane( ro, rd, vec4( 0., 0., 1., 0.) );
-    
+
     if( d > 0. && d < maxd ) {
         maxd = d;
 	    vec3 intersection = ro + rd*d;
         float l = length(intersection.xy);
-        
+
         if( l > RING_INNER_RADIUS && l < RING_OUTER_RADIUS ) {
             float dens = .5 + .5 * (.2+.8*noise( l*.07 )) * (.5+.5*noise(intersection.xy));
             vec3 col = mix( RING_COLOR_1, RING_COLOR_2, abs( noise(l*0.2) ) ) * abs(dens) * 1.5;
-            
+
             col *= ringShadowColor( intersection );
     		col *= .8+.3*diffuse( vec3(0,0,1), SUN_DIRECTION );
 			col *= SUN_COLOR;
@@ -486,25 +458,25 @@ vec4 renderRing( const in vec3 ro, const in vec3 rd, inout float maxd ) {
     vec4 far = renderRingFar( ro, rd, maxd );
     float l = length( ro.xy );
 
-    if( abs(ro.z) < RING_HEIGHT+RING_DETAIL_DISTANCE 
-        && l < RING_OUTER_RADIUS+RING_DETAIL_DISTANCE 
+    if( abs(ro.z) < RING_HEIGHT+RING_DETAIL_DISTANCE
+        && l < RING_OUTER_RADIUS+RING_DETAIL_DISTANCE
         && l > RING_INNER_RADIUS-RING_DETAIL_DISTANCE ) {
-     	
+
 	    float d = iPlane( ro, rd, vec4( 0., 0., 1., 0.) );
         float detail = mix( .5 * noise( fract(ro.xy+rd.xy*d) * 92.1)+.25, 1., smoothstep( 0.,RING_DETAIL_DISTANCE, d) );
-        far.xyz *= detail;    
+        far.xyz *= detail;
     }
-    
+
 	// are asteroids neaded ?
-    if( abs(ro.z) < RING_HEIGHT+ASTEROID_MAX_DISTANCE 
-        && l < RING_OUTER_RADIUS+ASTEROID_MAX_DISTANCE 
+    if( abs(ro.z) < RING_HEIGHT+ASTEROID_MAX_DISTANCE
+        && l < RING_OUTER_RADIUS+ASTEROID_MAX_DISTANCE
         && l > RING_INNER_RADIUS-ASTEROID_MAX_DISTANCE ) {
-        
+
         vec4 near = renderRingNear( ro, rd );
         far = mix( far, near, near.w );
         maxd=0.;
     }
-            
+
     return far;
 }
 
@@ -516,22 +488,22 @@ vec4 renderStars( const in vec3 rd ) {
 	vec3 rds = rd;
 	vec3 col = vec3(0);
     float v = 1.0/( 2. * ( 1. + rds.z ) );
-    
+
     vec2 xy = vec2(rds.y * v, rds.x * v);
     float s = noise(rds*134.);
-    
+
     s += noise(rds*470.);
     s = pow(s,19.0) * 0.00001;
     if (s > 0.5) {
-        vec3 backStars = vec3(s)*.5 * vec3(0.95,0.8,0.9); 
+        vec3 backStars = vec3(s)*.5 * vec3(0.95,0.8,0.9);
         col += backStars;
     }
-	return   vec4( col, 1 ); 
-} 
+	return   vec4( col, 1 );
+}
 
 //-----------------------------------------------------
 // Atmospheric Scattering by GLtracy
-// 
+//
 // https://www.shadertoy.com/view/lslXDr
 //-----------------------------------------------------
 
@@ -556,10 +528,10 @@ float atmosphericPhaseMie( float g, float c, float cc ) {
 	float gg = g * g;
 	float a = ( 1.0 - gg ) * ( 1.0 + cc );
 	float b = 1.0 + gg - 2.0 * g * c;
-    
+
 	b *= sqrt( b );
-	b *= 2.0 + gg;	
-	
+	b *= 2.0 + gg;
+
 	return 1.5 * a / b;
 }
 
@@ -574,14 +546,14 @@ float atmosphericDensity( vec3 p ){
 float atmosphericOptic( vec3 p, vec3 q ) {
 	vec3 step = ( q - p ) / ATMOSPHERE_FNUM_OUT_SCATTER;
 	vec3 v = p + step * 0.5;
-	
+
 	float sum = 0.0;
 	for ( int i = 0; i < ATMOSPHERE_NUM_OUT_SCATTER; i++ ) {
 		sum += atmosphericDensity( v );
 		v += step;
 	}
 	sum *= length( step ) * ATMOSPHERE_SCALE_L;
-	
+
 	return sum;
 }
 
@@ -598,35 +570,35 @@ vec4 atmosphericInScatter( vec3 o, vec3 dir, vec2 e, vec3 l ) {
         vec3 u = v + l * iCSphereF( v, l, EARTH_RADIUS + EARTH_ATMOSPHERE );
 		float n = ( atmosphericOptic( p, v ) + atmosphericOptic( v, u ) ) * ( PI * 4.0 );
 		float dens = atmosphericDensity( v );
-  
+
 	    float m = MAX;
-		sum += dens * exp( -n * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R + ATMOSPHERE_K_M ) ) 
+		sum += dens * exp( -n * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R + ATMOSPHERE_K_M ) )
     		* (1. - renderRingFarShadow( u, SUN_DIRECTION ) );
  		sumdensity += dens;
-        
+
 		v += step;
 	}
 	sum *= len * ATMOSPHERE_SCALE_L;
-	
+
 	float c  = dot( dir, -l );
 	float cc = c * c;
-	
-	return vec4( sum * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R * atmosphericPhaseReyleigh( cc ) + 
-                         ATMOSPHERE_K_M * atmosphericPhaseMie( ATMOSPHERE_G_M, c, cc ) ) * ATMOSPHERE_E, 
+
+	return vec4( sum * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R * atmosphericPhaseReyleigh( cc ) +
+                         ATMOSPHERE_K_M * atmosphericPhaseMie( ATMOSPHERE_G_M, c, cc ) ) * ATMOSPHERE_E,
                 	     clamp(sumdensity * len * ATMOSPHERE_SCALE_L,0.,1.));
 }
 
 float atmosphericOpticLow( vec3 p, vec3 q ) {
 	vec3 step = ( q - p ) / ATMOSPHERE_FNUM_OUT_SCATTER_LOW;
 	vec3 v = p + step * 0.5;
-	
+
 	float sum = 0.0;
 	for ( int i = 0; i < ATMOSPHERE_NUM_OUT_SCATTER_LOW; i++ ) {
 		sum += atmosphericDensity( v );
 		v += step;
 	}
 	sum *= length( step ) * ATMOSPHERE_SCALE_L;
-	
+
 	return sum;
 }
 
@@ -646,32 +618,32 @@ vec3 atmosphericInScatterLow( vec3 o, vec3 dir, vec2 e, vec3 l ) {
 		v += step;
 	}
 	sum *= len * ATMOSPHERE_SCALE_L;
-	
+
 	float c  = dot( dir, -l );
 	float cc = c * c;
-	
-	return sum * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R * atmosphericPhaseReyleigh( cc ) + 
+
+	return sum * ( ATMOSPHERE_K_R * ATMOSPHERE_C_R * atmosphericPhaseReyleigh( cc ) +
                    ATMOSPHERE_K_M * atmosphericPhaseMie( ATMOSPHERE_G_M, c, cc ) ) * ATMOSPHERE_E;
 }
 
-vec4 renderAtmospheric( const in vec3 ro, const in vec3 rd, inout float d ) {    
+vec4 renderAtmospheric( const in vec3 ro, const in vec3 rd, inout float d ) {
     // inside or outside atmosphere?
     vec2 e = iCSphere2( ro, rd, EARTH_RADIUS + EARTH_ATMOSPHERE );
 	vec2 f = iCSphere2( ro, rd, EARTH_RADIUS );
-        
+
     if( length(ro) <= EARTH_RADIUS + EARTH_ATMOSPHERE ) {
         if( d < e.y ) {
             e.y = d;
         }
 		d = e.y;
 	    e.x = 0.;
-        
+
 	    if ( iSphere( ro, rd, vec4(0,0,0,EARTH_RADIUS)) > 0. ) {
 	        d = iSphere( ro, rd, vec4(0,0,0,EARTH_RADIUS));
 		}
     } else {
     	if(  iSphere( ro, rd, vec4(0,0,0,EARTH_RADIUS + EARTH_ATMOSPHERE )) < 0. ) return vec4(0.);
-        
+
         if ( e.x > e.y ) {
         	d = MAX;
 			return vec4(0.);
@@ -681,7 +653,7 @@ vec4 renderAtmospheric( const in vec3 ro, const in vec3 rd, inout float d ) {
 	return atmosphericInScatter( ro, rd, e, SUN_DIRECTION );
 }
 
-vec3 renderAtmosphericLow( const in vec3 ro, const in vec3 rd ) {    
+vec3 renderAtmosphericLow( const in vec3 ro, const in vec3 rd ) {
     vec2 e = iCSphere2( ro, rd, EARTH_RADIUS + EARTH_ATMOSPHERE );
     e.x = 0.;
     return atmosphericInScatterLow( ro, rd, e, SUN_DIRECTION );
@@ -689,7 +661,7 @@ vec3 renderAtmosphericLow( const in vec3 ro, const in vec3 rd ) {
 
 //-----------------------------------------------------
 // Seascape by TDM
-// 
+//
 // https://www.shadertoy.com/view/Ms2SD1
 //-----------------------------------------------------
 
@@ -708,9 +680,9 @@ float       SEA_TIME;
 const mat2  sea_octave_m = mat2(1.6,1.2,-1.2,1.6);
 
 float seaOctave( in vec2 uv, const in float choppy) {
-    uv += noise(uv);        
+    uv += noise(uv);
     vec2 wv = 1.0-abs(sin(uv));
-    vec2 swv = abs(cos(uv));    
+    vec2 swv = abs(cos(uv));
     wv = mix(wv,swv,wv);
     return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
 }
@@ -720,12 +692,12 @@ float seaMap(const in vec3 p) {
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
     vec2 uv = p.xz; uv.x *= 0.75;
-    
-    float d, h = 0.0;    
-    for(int i = 0; i < SEA_ITER_GEOMETRY; i++) {        
+
+    float d, h = 0.0;
+    for(int i = 0; i < SEA_ITER_GEOMETRY; i++) {
     	d = seaOctave((uv+SEA_TIME)*freq,choppy);
     	d += seaOctave((uv-SEA_TIME)*freq,choppy);
-        h += d * amp;        
+        h += d * amp;
     	uv *= sea_octave_m; freq *= 1.9; amp *= 0.22;
         choppy = mix(choppy,1.0,0.2);
     }
@@ -737,48 +709,48 @@ float seaMapHigh(const in vec3 p) {
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
     vec2 uv = p.xz; uv.x *= 0.75;
-    
-    float d, h = 0.0;    
-    for(int i = 0; i < SEA_ITER_FRAGMENT; i++) {        
+
+    float d, h = 0.0;
+    for(int i = 0; i < SEA_ITER_FRAGMENT; i++) {
     	d = seaOctave((uv+SEA_TIME)*freq,choppy);
     	d += seaOctave((uv-SEA_TIME)*freq,choppy);
-        h += d * amp;        
+        h += d * amp;
     	uv *= sea_octave_m; freq *= 1.9; amp *= 0.22;
         choppy = mix(choppy,1.0,0.2);
     }
     return p.y - h;
 }
 
-vec3 seaGetColor( const in vec3 n, vec3 eye, const in vec3 l, const in float att, 
-                  const in vec3 sunc, const in vec3 upc, const in vec3 reflected) {  
-    vec3 refracted = SEA_BASE * upc + diffuse(n,l) * SEA_WATER_COLOR * 0.12 * sunc; 
+vec3 seaGetColor( const in vec3 n, vec3 eye, const in vec3 l, const in float att,
+                  const in vec3 sunc, const in vec3 upc, const in vec3 reflected) {
+    vec3 refracted = SEA_BASE * upc + diffuse(n,l) * SEA_WATER_COLOR * 0.12 * sunc;
     vec3 color = mix(refracted,reflected,fresnel(n, -eye, 3.)*.65 );
-    
+
     color += upc*SEA_WATER_COLOR * (att * 0.18);
     color += sunc * vec3(specular(n,l,eye,60.0));
-    
+
     return color;
 }
 
 vec3 seaGetNormal(const in vec3 p, const in float eps) {
     vec3 n;
-    n.y = seaMapHigh(p);    
+    n.y = seaMapHigh(p);
     n.x = seaMapHigh(vec3(p.x+eps,p.y,p.z)) - n.y;
     n.z = seaMapHigh(vec3(p.x,p.y,p.z+eps)) - n.y;
     n.y = eps;
     return normalize(n);
 }
 
-float seaHeightMapTracing(const in vec3 ori, const in vec3 dir, out vec3 p) {  
+float seaHeightMapTracing(const in vec3 ori, const in vec3 dir, out vec3 p) {
     float tm = 0.0;
-    float tx = 1000.0;    
+    float tx = 1000.0;
     float hx = seaMap(ori + dir * tx);
-    if(hx > 0.0) return tx;   
-    float hm = seaMap(ori + dir * tm);    
+    if(hx > 0.0) return tx;
+    float hm = seaMap(ori + dir * tm);
     float tmid = 0.0;
     for(int i = 0; i < SEA_NUM_STEPS; i++) {
-        tmid = mix(tm,tx, hm/(hm-hx));                   
-        p = ori + dir * tmid;                   
+        tmid = mix(tm,tx, hm/(hm-hx));
+        p = ori + dir * tmid;
     	float hmid = seaMap(p);
 		if(hmid < 0.0) {
         	tx = tmid;
@@ -801,23 +773,23 @@ vec3 seaUntransform( in vec3 x ) {
     return x;
 }
 
-void renderSea( const in vec3 ro, const in vec3 rd, inout vec3 n, inout float att ) {    
+void renderSea( const in vec3 ro, const in vec3 rd, inout vec3 n, inout float att ) {
     vec3 p,
     rom = seaTransform(ro),
     rdm = seaTransform(rd);
-    
+
     rom.y -= EARTH_RADIUS;
     rom *= 1000.;
     rom.xz += vec2(3.1,.2)*time;
 
     SEA_TIME = time * SEA_SPEED;
-    
+
     seaHeightMapTracing(rom,rdm,p);
     float squareddist = dot(p - rom, p-rom );
     n = seaGetNormal(p, squareddist * SEA_EPSILON_NRM );
-    
+
     n = seaUntransform(n);
-    
+
     att = clamp(SEA_HEIGHT+p.y, 0.,1.);
 }
 
@@ -855,7 +827,7 @@ float terrainMed( vec2 p ) {
 		s *= 0.5 + 0.1*t;
         p = 0.97*terrainM2*p + (t-0.5)*0.12;
 	}
-            
+
     return t*33.0;
 }
 
@@ -870,13 +842,13 @@ float terrainHigh( vec2 p ) {
 		s *= 0.5 + 0.1*t;
         p = 0.97*terrainM2*p + (t-0.5)*0.12;
 	}
-    
+
     t += t*0.015*fbm( q );
 	return t*33.0;
 }
 
 float terrainMap( const in vec3 pos ) {
-	return pos.y - terrainMed(pos.xz);  
+	return pos.y - terrainMed(pos.xz);
 }
 
 float terrainMapH( const in vec3 pos ) {
@@ -901,7 +873,7 @@ float terrainCalcShadow(in vec3 ro, in vec3 rd ) {
 	vec2  eps = vec2(150.0,0.0);
     float h1 = terrainMed( ro.xz );
     float h2 = terrainLow( ro.xz );
-    
+
     float d1 = 10.0;
     float d2 = 80.0;
     float d3 = 200.0;
@@ -914,9 +886,9 @@ float terrainCalcShadow(in vec3 ro, in vec3 rd ) {
 vec3 terrainCalcNormalHigh( in vec3 pos, float t ) {
     vec2 e = vec2(1.0,-1.0)*0.001*t;
 
-    return normalize( e.xyy*terrainMapH( pos + e.xyy ) + 
-					  e.yyx*terrainMapH( pos + e.yyx ) + 
-					  e.yxy*terrainMapH( pos + e.yxy ) + 
+    return normalize( e.xyy*terrainMapH( pos + e.xyy ) +
+					  e.yyx*terrainMapH( pos + e.yyx ) +
+					  e.yxy*terrainMapH( pos + e.yxy ) +
 					  e.xxx*terrainMapH( pos + e.xxx ) );
 }
 
@@ -947,14 +919,14 @@ vec3 llamelPosition() {
     return vec3( pos.x, terrainMed( pos ), pos.y );
 }
 
-vec3 terrainShade( const in vec3 col, const in vec3 pos, const in vec3 rd, const in vec3 n, const in float spec, 
+vec3 terrainShade( const in vec3 col, const in vec3 pos, const in vec3 rd, const in vec3 n, const in float spec,
                    const in vec3 sunc, const in vec3 upc, const in vec3 reflc ) {
 	vec3 sunDirection =  terrainTransform(SUN_DIRECTION);
     float dif = diffuse( n, sunDirection );
     float bac = diffuse( n, vec3(-sunDirection.x, sunDirection.y, -sunDirection.z) );
     float sha = terrainCalcShadow( pos, sunDirection );
     float amb = clamp( n.y,0.0,1.0);
-        
+
     vec3 lin  = vec3(0.0);
     lin += 2.*dif*sunc*vec3( sha, sha*sha*0.1+0.9*sha, sha*sha*0.2+0.8*sha );
     lin += 0.2*amb*upc;
@@ -965,7 +937,7 @@ vec3 terrainShade( const in vec3 col, const in vec3 pos, const in vec3 rd, const
 vec3 terrainGetColor( const in vec3 pos, const in vec3 rd, const in float t, const in vec3 sunc, const in vec3 upc, const in vec3 reflc ) {
     vec3 nor = terrainCalcNormalHigh( pos, t );
     vec3 sor = terrainCalcNormalMed( pos, t );
-        
+
     float spec = 0.005;
 
 #ifdef DISPLAY_TERRAIN_DETAIL
@@ -978,7 +950,7 @@ vec3 terrainGetColor( const in vec3 pos, const in vec3 rd, const in float t, con
     col = mix( col, 0.20*vec3(0.45,.30,0.15)*(0.50+0.50*r),smoothstep(0.825,0.925,nor.y+.025*no) );
 	col = mix( col, 0.15*vec3(0.30,.30,0.10)*(0.25+0.75*r),smoothstep(0.95,1.0,nor.y+.025*no) );
     col *= .88+.12*no;
-        
+
     float s = nor.y + 0.03*pos.y + 0.35*fbm(0.05*pos.xz) - .35;
     float sf = fwidth(s) * 1.5;
     s = smoothstep(0.84-sf, 0.84+sf, s );
@@ -991,7 +963,7 @@ vec3 terrainGetColor( const in vec3 pos, const in vec3 rd, const in float t, con
 #ifdef DISPLAY_LLAMEL
     col *= clamp( distance(pos.xz, llamelPosition().xz )*0.4, 0.4, 1.);
 #endif
-    
+
     return col;
 }
 
@@ -999,28 +971,28 @@ vec3 terrainTransformRo( const in vec3 ro ) {
     vec3 rom = terrainTransform(ro);
     rom.y -= EARTH_RADIUS - 100.;
     rom.xz *= 5.;
-    rom.xz += vec2(-170.,50.)+vec2(-4.,.4)*time;    
+    rom.xz += vec2(-170.,50.)+vec2(-4.,.4)*time;
     rom.y += (terrainLow( rom.xz ) - 86.)*clamp( 1.-1.*(length(ro)-EARTH_RADIUS), 0., 1.);
     return rom;
 }
 
-vec4 renderTerrain( const in vec3 ro, const in vec3 rd, inout vec3 intersection, inout vec3 n ) {    
+vec4 renderTerrain( const in vec3 ro, const in vec3 rd, inout vec3 intersection, inout vec3 n ) {
     vec3 p,
     rom = terrainTransformRo(ro),
     rdm = terrainTransform(rd);
-        
+
     float tmin = 10.0;
     float tmax = 3200.0;
-    
+
     float res = terrainIntersect( rom, rdm, tmin, tmax );
-    
+
     if( res > tmax ) {
         res = -1.;
     } else {
         vec3 pos =  rom+rdm*res;
         n = terrainCalcNormalMed( pos, res );
         n = terrainUntransform( n );
-        
+
         intersection = ro+rd*res/100.;
     }
     return vec4(res, rom+rdm*res);
@@ -1055,14 +1027,14 @@ float llamelMapLeg(vec3 p, vec3 j0, vec3 j3, vec3 l, vec4 r, vec3 rt){//z joint 
 }
 
 float llamelMap(in vec3 p) {
-	const vec3 rt=vec3(0.0,0.0,1.0);	
+	const vec3 rt=vec3(0.0,0.0,1.0);
 	p.y += 0.25*llamelScale;
     p.xz -= 0.5*llamelScale;
     p.xz = vec2(-p.z, p.x);
     vec3 pori = p;
-        
+
     p /= llamelScale;
-    
+
 	vec2 c=floor(p.xz);
 	p.xz=fract(p.xz)-vec2(0.5);
     p.y -= p.x*.04*llamelScale;
@@ -1085,9 +1057,9 @@ float llamelMap(in vec3 p) {
 vec3 llamelGetNormal( in vec3 ro ) {
     vec2 e = vec2(1.0,-1.0)*0.001;
 
-    return normalize( e.xyy*llamelMap( ro + e.xyy ) + 
-					  e.yyx*llamelMap( ro + e.yyx ) + 
-					  e.yxy*llamelMap( ro + e.yxy ) + 
+    return normalize( e.xyy*llamelMap( ro + e.xyy ) +
+					  e.yyx*llamelMap( ro + e.yyx ) +
+					  e.yxy*llamelMap( ro + e.yxy ) +
 					  e.xxx*llamelMap( ro + e.xxx ) );
 }
 
@@ -1104,10 +1076,10 @@ vec4 renderLlamel( in vec3 ro, const in vec3 rd, const in vec3 sunc, const in ve
         vec3 col = vec3(0.45,.30,0.15)*.2;
         vec3 pos = ro + rd*tm;
         vec3 nor = llamelGetNormal( pos );
-        col = terrainShade( col, pos, rd, nor, .01, sunc, upc, reflc );        
+        col = terrainShade( col, pos, rd, nor, .01, sunc, upc, reflc );
         return vec4(col, clamp( 1.-(dm-0.01)/0.01,0., 1.) );
     }
-    
+
     return vec4(0.);
 }
 #endif
@@ -1116,7 +1088,7 @@ vec4 renderLlamel( in vec3 ro, const in vec3 rd, const in vec3 sunc, const in ve
 // Clouds (by me ;))
 //-----------------------------------------------------
 
-vec4 renderClouds( const in vec3 ro, const in vec3 rd, const in float d, const in vec3 n, const in float land, 
+vec4 renderClouds( const in vec3 ro, const in vec3 rd, const in float d, const in vec3 n, const in float land,
                    const in vec3 sunColor, const in vec3 upColor, inout float shadow ) {
 	vec3 intersection = ro+rd*d;
     vec3 cint = intersection*0.009;
@@ -1144,8 +1116,8 @@ vec4 renderClouds( const in vec3 ro, const in vec3 rd, const in float d, const i
     vec3 clbasecolor = vec3(1.);
     vec3 clcol = .1*clbasecolor*sunColor * vec3(specular(n,SUN_DIRECTION,rd,36.0));
     clcol += .3*clbasecolor*sunColor;
-    clcol += clbasecolor*(diffuse(n,SUN_DIRECTION)*sunColor+upColor);  
-    
+    clcol += clbasecolor*(diffuse(n,SUN_DIRECTION)*sunColor+upColor);
+
     return vec4( clcol, clouds );
 }
 
@@ -1161,21 +1133,21 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
     vec4 res;
 
 #ifndef HIDE_TERRAIN
-    bool renderTerrainDetail = length(ro) < EARTH_RADIUS+EARTH_ATMOSPHERE && 
+    bool renderTerrainDetail = length(ro) < EARTH_RADIUS+EARTH_ATMOSPHERE &&
         					   dot( terrainUntransform( vec3(0.,1.,0.) ), normalize(ro) ) > .9996;
 #endif
-    bool renderSeaDetail     = d < 1. && dot( seaUntransform( vec3(0.,1.,0.) ), normalize(ro) ) > .9999; 
+    bool renderSeaDetail     = d < 1. && dot( seaUntransform( vec3(0.,1.,0.) ), normalize(ro) ) > .9999;
     float mixDetailColor = 0.;
-        
+
 	if( d < 0. || d > maxd) {
 #ifndef HIDE_TERRAIN
         if( renderTerrainDetail ) {
        		intersection = ro;
             n = normalize( ro );
-        } else { 	       
+        } else {
 	        return vec4(0);
         }
-#else 
+#else
       	return vec4(0.);
 #endif
 	}
@@ -1183,15 +1155,15 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
 	    maxd = d;
     }
     float att = 0.;
-    
+
     if( dot(n,SUN_DIRECTION) < -0.1 ) return vec4( 0., 0., 0., 1. );
-    
+
     float dm = MAX, e = 0.;
     vec3 col, detailCol, nDetail;
-    
-    // normal and intersection 
+
+    // normal and intersection
 #ifndef HIDE_TERRAIN
-    if( renderTerrainDetail ) {   
+    if( renderTerrainDetail ) {
         res = renderTerrain( ro, rd, intersection, nDetail );
         if( res.x < 0. && d < 0. ) {
 	        return vec4(0);
@@ -1202,9 +1174,9 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
         }
         mixDetailColor = 1.-smoothstep(.75, 1., (length(ro)-EARTH_RADIUS) / EARTH_ATMOSPHERE);
         n = normalize( mix( n, nDetail, mixDetailColor ) );
-    } else 
-#endif        
-    if( renderSeaDetail ) {    
+    } else
+#endif
+    if( renderSeaDetail ) {
         float attsea, mf = smoothstep(.5,1.,d);
 
         renderSea( ro, rd, nDetail, attsea );
@@ -1217,25 +1189,25 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
         if( d < 1500. ) {
             e += (-.03+.06* fbm( intersection*0.1,0.4,2.96))*(1.-d/1500.);
         }
-#endif  
+#endif
     }
-    
-    vec3 sunColor = .25*renderAtmosphericLow( intersection, SUN_DIRECTION).xyz;  
-    vec3 upColor = 2.*renderAtmosphericLow( intersection, n).xyz;  
-    vec3 reflColor = renderAtmosphericLow( intersection, reflect(rd,n)).xyz; 
-                 
-    // color  
+
+    vec3 sunColor = .25*renderAtmosphericLow( intersection, SUN_DIRECTION).xyz;
+    vec3 upColor = 2.*renderAtmosphericLow( intersection, n).xyz;
+    vec3 reflColor = renderAtmosphericLow( intersection, reflect(rd,n)).xyz;
+
+    // color
 #ifndef HIDE_TERRAIN
     if(renderTerrainDetail ) {
         detailCol = col =  terrainGetColor(res.yzw, rd, res.x, sunColor, upColor, reflColor);
 		d = 0.;
-    }   
+    }
 #endif
-     
+
     if( mixDetailColor < 1. ) {
         if( e < .45 ) {
             // sea
-            col = seaGetColor(n,rd,SUN_DIRECTION, att, sunColor, upColor, reflColor);    
+            col = seaGetColor(n,rd,SUN_DIRECTION, att, sunColor, upColor, reflColor);
         } else {
             // planet (land) far
             float land1 = max(0.1, fbm( intersection*0.0013,0.4,2.96) );
@@ -1253,11 +1225,11 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
 #endif
         }
     }
-    
+
     if( mixDetailColor > 0. ) {
         col = mix( col, detailCol, mixDetailColor );
     }
-        
+
 #ifdef DISPLAY_LLAMEL
     if(renderTerrainDetail ) {
         vec3 rom = terrainTransformRo(ro),
@@ -1269,19 +1241,19 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
         }
     }
 #endif
-    
+
     d = iSphere( ro, rd, vec4( 0., 0., 0., EARTH_RADIUS+EARTH_CLOUDS ) );
-    if( d > 0. ) { 
+    if( d > 0. ) {
         float shadow;
 		vec4 clouds = renderClouds( ro, rd, d, n, e, sunColor, upColor, shadow);
-        col *= shadow; 
+        col *= shadow;
         col = mix( col, clouds.rgb, clouds.w );
     }
-    
+
     float m = MAX;
     col *= (1. - renderRingFarShadow( ro+rd*d, SUN_DIRECTION ) );
 
- 	return vec4( col, 1. ); 
+ 	return vec4( col, 1. );
 }
 
 //-----------------------------------------------------
@@ -1293,27 +1265,27 @@ vec4 renderPlanet( const in vec3 ro, const in vec3 rd, const in vec3 up, inout f
 vec3 lensFlare( const in vec2 uv, const in vec2 pos) {
 	vec2 main = uv-pos;
 	vec2 uvd = uv*(length(uv));
-	
+
 	float f0 = 1.5/(length(uv-pos)*16.0+1.0);
-	
+
 	float f1 = max(0.01-pow(length(uv+1.2*pos),1.9),.0)*7.0;
 
 	float f2 = max(1.0/(1.0+32.0*pow(length(uvd+0.8*pos),2.0)),.0)*00.25;
 	float f22 = max(1.0/(1.0+32.0*pow(length(uvd+0.85*pos),2.0)),.0)*00.23;
 	float f23 = max(1.0/(1.0+32.0*pow(length(uvd+0.9*pos),2.0)),.0)*00.21;
-	
+
 	vec2 uvx = mix(uv,uvd,-0.5);
-	
+
 	float f4 = max(0.01-pow(length(uvx+0.4*pos),2.4),.0)*6.0;
 	float f42 = max(0.01-pow(length(uvx+0.45*pos),2.4),.0)*5.0;
 	float f43 = max(0.01-pow(length(uvx+0.5*pos),2.4),.0)*3.0;
-	
+
 	vec3 c = vec3(.0);
-	
+
 	c.r+=f2+f4; c.g+=f22+f42; c.b+=f23+f43;
 	c = c*.5 - vec3(length(uvd)*.05);
 	c+=vec3(f0);
-	
+
 	return c;
 }
 
@@ -1342,12 +1314,12 @@ void cameraPath( in float t, out vec3 ro, out vec3 ta, out vec3 up ) {
 
     pro = ro = vec3(900. ,7000. ,1500. );
     pta = ta = vec3(    0. ,    0. ,   0. );
-    pup = up = vec3(    0. ,    0.4,   1. ); 
-   
+    pup = up = vec3(    0. ,    0.4,   1. );
+
     camint( ro, t, 5., vec3(-4300. ,-1000. , 500. ), pro, dro );
     camint( ta, t, 5., vec3(    0. ,    0. ,   0. ), pta, dta );
-    camint( up, t, 7., vec3(    0. ,    0.1,   1. ), pup, dup ); 
- 
+    camint( up, t, 7., vec3(    0. ,    0.1,   1. ), pup, dup );
+
     camint( ro, t, 3., vec3(-1355. , 1795. , 1.2 ), pro, dro );
     camint( ta, t, 1., vec3(    0. , 300. ,-600. ), pta, dta );
     camint( up, t, 6., vec3(    0. ,  0.1,    1. ), pup, dup );
@@ -1355,43 +1327,43 @@ void cameraPath( in float t, out vec3 ro, out vec3 ta, out vec3 up ) {
     camint( ro, t, 10., vec3(-1355. , 1795. , 1.2 ), pro, dro );
     camint( ta, t, 14., vec3(    0. , 100. ,   600. ), pta, dta );
     camint( up, t, 13., vec3(    0. ,  0.3,    1. ), pup, dup );
-    
+
     vec3 roe = seaUntransform( vec3( 0., EARTH_RADIUS+0.004, 0. ) );
     vec3 upe = seaUntransform( vec3( 0., 1., 0. ) );
-    
+
     camint( ro, t, 7.,roe, pro, dro );
     camint( ta, t, 7., vec3( EARTH_RADIUS + 0., EARTH_RADIUS - 500., 500. ), pta, dta );
     camint( up, t, 6., upe, pup, dup );
-        
+
     camint( ro, t, 17.,roe, pro, dro );
     camint( ta, t, 17., vec3( EARTH_RADIUS + 500., EARTH_RADIUS + 1300., -100. ), pta, dta );
     camint( up, t, 18., vec3(.0,1.,1.), pup, dup );
-    
+
     camint( ro, t, 11., vec3(  3102. ,  0. , 1450. ), pro, dro );
     camint( ta, t, 4., vec3(    0. ,   -100. ,   0. ), pta, dta );
-    camint( up, t, 8., vec3(    0. ,    0.15,   1. ), pup, dup ); 
-#ifndef HIDE_TERRAIN    
+    camint( up, t, 8., vec3(    0. ,    0.15,   1. ), pup, dup );
+#ifndef HIDE_TERRAIN
     roe = terrainUntransform( vec3( 0., EARTH_RADIUS+0.004, 0. ) );
     upe = terrainUntransform( vec3( 0., 1., 0. ) );
-    
+
     camint( ro, t, 7., roe, pro, dro );
     camint( ta, t, 12., vec3( -EARTH_RADIUS, EARTH_RADIUS+200., 100.), pta, dta );
     camint( up, t, 2., upe, pup, dup );
-        
+
     roe = terrainUntransform( vec3( 0., EARTH_RADIUS+0.001, 0. ) );
     camint( ro, t, 17.,roe, pro, dro );
     camint( ta, t, 18., roe + vec3( 5000., EARTH_RADIUS-100., -2000.), pta, dta );
     camint( up, t, 18., vec3(.0,1.,1.), pup, dup );
-        
+
     roe = terrainUntransform( vec3( 0., EARTH_RADIUS+1.8, 0. ) );
     camint( ro, t, 4.,roe, pro, dro );
     camint( ta, t, 4.5, roe + vec3( EARTH_RADIUS, EARTH_RADIUS+2000., -30.), pta, dta );
     camint( up, t, 4., vec3(.0,1.,1.), pup, dup );
-#endif    
+#endif
     camint( ro, t, 10., vec3(900. ,7000. , 1500. ), pro, dro );
     camint( ta, t, 2., vec3(    0. ,    0. ,   0. ), pta, dta );
-    camint( up, t, 10., vec3(    0. ,    0.4,   1. ), pup, dup ); 
-    
+    camint( up, t, 10., vec3(    0. ,    0.4,   1. ), pup, dup );
+
     up = normalize( up );
 }
 
@@ -1401,12 +1373,12 @@ void cameraPath( in float t, out vec3 ro, out vec3 ta, out vec3 up ) {
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 	vec2 uv = fragCoord.xy / iResolution.xy;
-    
+
     vec2 p = -1.0 + 2.0 * (fragCoord.xy) / iResolution.xy;
     p.x *= iResolution.x/iResolution.y;
-    
+
     vec3 col;
-    
+
 // black bands
     vec2 bandy = vec2(.1,.9);
     if( uv.y < bandy.x || uv.y > bandy.y ) {
@@ -1421,27 +1393,27 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
         vec3 vv = normalize( cross(uu,ww));
         vec3 rd = normalize( -p.x*uu + p.y*vv + 2.2*ww );
 
-        float maxd = MAX;  
+        float maxd = MAX;
         col = renderStars( rd ).xyz;
 
-        vec4 planet = renderPlanet( ro, rd, up, maxd );       
+        vec4 planet = renderPlanet( ro, rd, up, maxd );
         if( planet.w > 0. ) col.xyz = planet.xyz;
 
         float atmosphered = maxd;
         vec4 atmosphere = .85*renderAtmospheric( ro, rd, atmosphered );
-        col = col * (1.-atmosphere.w ) + atmosphere.xyz; 
+        col = col * (1.-atmosphere.w ) + atmosphere.xyz;
 
         vec4 ring = renderRing( ro, rd, maxd );
         if( ring.w > 0. && atmosphered < maxd ) {
-           ring.xyz = ring.xyz * (1.-atmosphere.w ) + atmosphere.xyz; 
+           ring.xyz = ring.xyz * (1.-atmosphere.w ) + atmosphere.xyz;
         }
         col = col * (1.-ring.w ) + ring.xyz;
 
 #ifdef DISPLAY_CLOUDS
         float lro = length(ro);
         if( lro < EARTH_RADIUS+EARTH_CLOUDS*1.25 ) {
-            vec3 sunColor = 2.*renderAtmosphericLow( ro, SUN_DIRECTION);  
-            vec3 upColor = 4.*renderAtmosphericLow( ro, vec3(-SUN_DIRECTION.x, SUN_DIRECTION.y, -SUN_DIRECTION.z));  
+            vec3 sunColor = 2.*renderAtmosphericLow( ro, SUN_DIRECTION);
+            vec3 upColor = 4.*renderAtmosphericLow( ro, vec3(-SUN_DIRECTION.x, SUN_DIRECTION.y, -SUN_DIRECTION.z));
 
             if( lro < EARTH_RADIUS+EARTH_CLOUDS ) {
                 // clouds
@@ -1456,45 +1428,45 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
             float offset = lro-EARTH_RADIUS-EARTH_CLOUDS;
             col = mix( col, .5*sunColor, .15*abs(noise(offset*100.))*clamp(1.-4.*abs(offset)/EARTH_CLOUDS, 0., 1.) );
         }
-#endif 
+#endif
 
         // post processing
         col = pow( clamp(col,0.0,1.0), vec3(0.4545) );
-        col *= vec3(1.,0.99,0.95);   
-        col = clamp(1.06*col-0.03, 0., 1.);      
+        col *= vec3(1.,0.99,0.95);
+        col = clamp(1.06*col-0.03, 0., 1.);
 
         vec2 sunuv =  2.7*vec2( dot( SUN_DIRECTION, -uu ), dot( SUN_DIRECTION, vv ) );
         float flare = dot( SUN_DIRECTION, normalize(ta-ro) );
         col += vec3(1.4,1.2,1.0)*lensFlare(p, sunuv)*clamp( flare+.3, 0., 1.);
 
         uv.y = (uv.y-bandy.x)*(1./(bandy.y-bandy.x));
-        col *= 0.5 + 0.5*pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), 0.1 ); 
+        col *= 0.5 + 0.5*pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), 0.1 );
     }
     fragColor = vec4( col ,1.0);
 }
 
 void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 ro, in vec3 rd ) {
-    float maxd = MAX;  
+    float maxd = MAX;
     time = iTime * .7;
-    
+
     rd = rd.xzy;
     ro = (ro.xzy * .1) + vec3(-1355. , 1795. , 1. );
-    
+
     vec3 col = renderStars( rd ).xyz;
 
-    vec4 planet = renderPlanet( ro, rd, vec3(0,.1,1), maxd );       
+    vec4 planet = renderPlanet( ro, rd, vec3(0,.1,1), maxd );
     if( planet.w > 0. ) col.xyz = planet.xyz;
 
     float atmosphered = maxd;
     vec4 atmosphere = .85*renderAtmospheric( ro, rd, atmosphered );
-    col = col * (1.-atmosphere.w ) + atmosphere.xyz; 
+    col = col * (1.-atmosphere.w ) + atmosphere.xyz;
 
     vec4 ring = renderRing( ro, rd, maxd );
     col = col * (1.-ring.w ) + ring.xyz;
-    
+
     // post processing
     col = pow( clamp(col,0.0,1.0), vec3(0.4545) );
-    col *= vec3(1.,0.99,0.95);   
-    col = clamp(1.06*col-0.03, 0., 1.);      
+    col *= vec3(1.,0.99,0.95);
+    col = clamp(1.06*col-0.03, 0., 1.);
     fragColor = vec4( col ,1.0);
 }

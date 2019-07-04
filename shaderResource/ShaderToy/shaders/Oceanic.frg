@@ -1,33 +1,6 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
-
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
 
 // Clouds: slice based volumetric height-clouds with god-rays, density, sun-radiance/shadow
-// and 
+// and
 // Water: simple reflecting sky/sun and cloud shaded height-modulated waves
 //
 // Created by Frank Hugenroth 03/2013
@@ -50,7 +23,7 @@ float wavegain   = 1.0;       // change to adjust the general water wave level
 float large_waveheight = 1.0; // change to adjust the "heavy" waves (set to 0.0 to have a very still ocean :)
 float small_waveheight = 1.0; // change to adjust the small waves
 
-vec3 fogcolor    = vec3( 0.5, 0.7, 1.1 );              
+vec3 fogcolor    = vec3( 0.5, 0.7, 1.1 );
 vec3 skybottom   = vec3( 0.6, 0.8, 1.2 );
 vec3 skytop      = vec3(0.05, 0.2, 0.5);
 vec3 reflskycolor= vec3(0.025, 0.10, 0.20);
@@ -66,7 +39,7 @@ vec3 light       = normalize( vec3(  0.1, 0.25,  0.9 ) );
 
 
 
-// random/hash function              
+// random/hash function
 float hash( float n )
 {
   return fract(cos(n)*41415.92653);
@@ -147,7 +120,7 @@ float water( vec2 p )
     shift1 *= 1.841;
     p *= m2*0.9331;
   }
-  
+
   height += wave;
   return height;
 }
@@ -174,7 +147,7 @@ float trace_fog(in vec3 rStart, in vec3 rDirection )
     q2 += 120.;
     q3 += 0.15;
   }
-  
+
   return clamp( 1.0-sum, 0.0, 1.0 );
 #else
   return 1.0;
@@ -192,15 +165,15 @@ bool trace(in vec3 rStart, in vec3 rDirection, in float sundot, out float fog, o
   float alpha = 0.1;
   float asum = 0.0;
   vec3 p = rStart;
-	
+
   for( int j=1000; j<1120; j++ )
   {
     // some speed-up if all is far away...
-    if( t>500.0 ) 
+    if( t>500.0 )
       st = 2.0;
-    else if( t>800.0 ) 
+    else if( t>800.0 )
       st = 5.0;
-    else if( t>1000.0 ) 
+    else if( t>1000.0 )
       st = 12.0;
 
     p = rStart + t*rDirection; // calc current ray position
@@ -219,22 +192,22 @@ bool trace(in vec3 rStart, in vec3 rDirection, in float sundot, out float fog, o
 
     if( h<0.1 ) // hit the water?
     {
-      dist = t; 
+      dist = t;
       fog = asum;
       return true;
     }
 
     if( p.y>450.0 ) // lost in space? quit...
       break;
-    
-    // speed up ray if possible...    
+
+    // speed up ray if possible...
     if(rDirection.y > 0.0) // look up (sky!) -> make large steps
       t += 30.0 * st;
     else
       t += max(1.0,1.0*h)*st;
   }
 
-  dist = t; 
+  dist = t;
   fog = asum;
   if (h<10.0)
    return true;
@@ -285,7 +258,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 #if RENDER_CLOUDS
     // CLOUDS
     vec2 shift = vec2( iTime*80.0, iTime*60.0 );
-    vec4 sum = vec4(0,0,0,0); 
+    vec4 sum = vec4(0,0,0,0);
     for (int q=1000; q<1100; q++) // 100 layers
     {
       float c = (float(q-1000)*12.0+350.0-campos.y) / rd.y; // cloud height
@@ -294,7 +267,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
       vec3 localcolor = mix(vec3( 1.1, 1.05, 1.0 ), 0.7*vec3( 0.4,0.4,0.3 ), alpha); // density color white->gray
       alpha = (1.0-sum.w)*alpha; // alpha/density saturation (the more a cloud layer's density, the more the higher layers will be hidden)
       sum += vec4(localcolor*alpha, alpha); // sum up weightened color
-      
+
       if (sum.w>0.98)
         break;
     }
@@ -315,9 +288,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
   }
   else
   {
-#if RENDER_WATER        
+#if RENDER_WATER
     //  render water
-    
+
     vec3 wpos = campos + dist*rd; // calculate position where ray meets water
 
     // calculate water-mirror
@@ -325,9 +298,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 ydiff = vec2(0.0, 0.1)*wavegain*4.;
 
     // get the reflected ray direction
-    rd = reflect(rd, normalize(vec3(water(wpos.xz-xdiff) - water(wpos.xz+xdiff), 1.0, water(wpos.xz-ydiff) - water(wpos.xz+ydiff))));  
+    rd = reflect(rd, normalize(vec3(water(wpos.xz-xdiff) - water(wpos.xz+xdiff), 1.0, water(wpos.xz-ydiff) - water(wpos.xz+ydiff))));
     float refl = 1.0-clamp(dot(rd,vec3(0.0, 1.0, 0.0)),0.0,1.0);
-  
+
     float sh = smoothstep(0.2, 1.0, trace_fog(wpos+20.0*rd,rd))*.7+.3;
     // water reflects more the lower the reflecting angle is...
     float wsky   = refl*sh;     // reflecting (sky-color) amount
@@ -337,7 +310,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     // watercolor
 
-    col = wsky*reflskycolor; // reflecting sky-color 
+    col = wsky*reflskycolor; // reflecting sky-color
     col += wwater*watercolor;
     col += vec3(.003, .005, .005) * (wpos.y-waterlevel+30.);
 
@@ -353,7 +326,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     col = mix( col, fco, fo );
 
     // add god-rays
-    col += vec3(0.5, 0.4, 0.3)*fog; 
+    col += vec3(0.5, 0.4, 0.3)*fog;
   }
 
   fragColor=vec4(col,1.0);

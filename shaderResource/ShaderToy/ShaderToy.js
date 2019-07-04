@@ -32,7 +32,37 @@ px.import({       scene: 'px:scene.1.js',
   var fooRGBA = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
   var fooGRAY = scene.create({ t: 'image', parent: rect, resource: noiseGRAY, x: 0, y: 0, interactive: false, a: 0.01 });
 
+  var header = `////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                #ifdef GL_ES
+                    precision mediump float;
+                #endif
+
+                uniform vec2        u_resolution;
+                uniform vec4        u_mouse;
+
+                uniform float       u_time;
+                uniform sampler2D   s_texture;
+
+                #define iResolution u_resolution
+                #define iTime       u_time
+                #define iChannel0   s_texture
+
+                // #define fragCoord   gl_FragCoord
+                // #define fragColor   gl_FragColor
+                #define iMouse      u_mouse
+
+                #define texture     texture2D
+                #define textureLod  texture2D
+
+                // void mainImage(out vec4, in vec2);
+                // void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                `;
+
   var toys = [
+
       "PlanetShadertoy.frg",
       "TheHomeDrive.frg",
       "FlowOfCells.frg",
@@ -141,7 +171,7 @@ px.import({       scene: 'px:scene.1.js',
 
   var shaderToy = null;
 
-  function CreateShader(shader)
+  function LoadShader(shader)
   {
     var filename = isObject(shader) ? shader.filename : shader;
     var texture0 = isObject(shader) ? shader.texture0 ? shader.texture0 : null : null;
@@ -150,9 +180,26 @@ px.import({       scene: 'px:scene.1.js',
 
     showCaption(name);
 
+    var fileLoadPromise = px.getModuleFile("/shaders/" + filename);
+    fileLoadPromise.then(function(shader)
+    {
+      var main = `void mainImage(out vec4, in vec2);
+                  void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }`;
+
+      var hasMainImage = (shader.indexOf("mainImage(") >= 0);
+
+      // Append "compatibility" header and possible wrapper around "mainImage()" ... if used.
+      var src = "data:text/plain," + header + (hasMainImage ? main : "") + shader;
+
+      CreateShader( src, texture0 );
+    });
+  }
+
+  function CreateShader(shader, texture0 = null)
+  {
     shaderToy = scene.create({
                 t: 'shaderResource',
-          fragment: base + "/shaders/" + filename,
+          fragment: shader,
           uniforms:
           {
             "u_time"      : "float",
@@ -235,7 +282,7 @@ px.import({       scene: 'px:scene.1.js',
       index = 0; // WRAP
 
     ResetInterval();
-    CreateShader(toys[index]);
+    LoadShader(toys[index]);
   }
 
   function PrevShader()
@@ -245,7 +292,7 @@ px.import({       scene: 'px:scene.1.js',
       index = toys.length - 1; // WRAP
 
     ResetInterval();
-    CreateShader(toys[index]);
+    LoadShader(toys[index]);
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -274,7 +321,8 @@ px.import({       scene: 'px:scene.1.js',
 
     if(hasShaders == true)
     {
-      CreateShader(toys[index++]);
+      LoadShader(toys[index++]);
+
       ResetInterval();
     }
   });

@@ -1,31 +1,3 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
-
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
 // Panteleymonov A K 2015
 
 //
@@ -37,7 +9,7 @@ float noise( vec3 x )
     vec3 p = floor(x);
     vec3 f = fract(x);
     f = f*f*(3.0-2.0*f);
-	
+
     float n = p.x + p.y*157.0 + 113.0*p.z;
     return mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
                    mix( hash(n+157.0), hash(n+158.0),f.x),f.y),
@@ -105,11 +77,11 @@ float noise4q(vec4 x)
 	f1=f1*f1*(3.0-2.0*f1);
 	f2=f2*f2*(3.0-2.0*f2);
 	vec4 n1 = vec4(0,1.0,157.0,158.0);
-	vec4 n2 = vec4(113.0,114.0,270.0,271.0);	
+	vec4 n2 = vec4(113.0,114.0,270.0,271.0);
 	vec4 vs1 = mix(hash4(p1), hash4(n1.yyyy+p1), f1);
 	vec4 vs2 = mix(hash4(n1.zzzz+p1), hash4(n1.wwww+p1), f1);
 	vec4 vs3 = mix(hash4(p2), hash4(n1.yyyy+p2), f1);
-	vec4 vs4 = mix(hash4(n1.zzzz+p2), hash4(n1.wwww+p2), f1);	
+	vec4 vs4 = mix(hash4(n1.zzzz+p2), hash4(n1.wwww+p2), f1);
 	vs1 = mix(vs1, vs2, f2);
 	vs3 = mix(vs3, vs4, f2);
 	vs2 = mix(hash4(n2.xxxx+p1), hash4(n2.yyyy+p1), f1);
@@ -135,14 +107,14 @@ float noiseSpere(vec3 ray,vec3 pos,float r,mat3 mr,float zoom,vec3 subnoise,floa
 {
   	float b = dot(ray,pos);
   	float c = dot(pos,pos) - b*b;
-    
+
     vec3 r1=vec3(0.0);
-    
+
     float s=0.0;
     float d=0.03125;
-    float d2=zoom/(d*d); 
+    float d2=zoom/(d*d);
     float ar=5.0;
-   
+
     for (int i=0;i<3;i++) {
 		float rq=r*r;
         if(c <rq)
@@ -165,9 +137,9 @@ float ring(vec3 ray,vec3 pos,float r,float size)
 {
   	float b = dot(ray,pos);
   	float c = dot(pos,pos) - b*b;
-   
+
     float s=max(0.0,(1.0-size*abs(r-sqrt(c))));
-    
+
     return s;
 }
 
@@ -176,15 +148,15 @@ float ringRayNoise(vec3 ray,vec3 pos,float r,float size,mat3 mr,float anim)
 {
   	float b = dot(ray,pos);
     vec3 pr=ray*b-pos;
-       
+
     float c=length(pr);
 
     pr*=mr;
-    
+
     pr=normalize(pr);
-    
+
     float s=max(0.0,(1.0-size*abs(r-c)));
-    
+
     float nd=noise4q(vec4(pr*1.0,-anim+c))*2.0;
     nd=pow(nd,2.0);
     float n=0.4;
@@ -194,7 +166,7 @@ float ringRayNoise(vec3 ray,vec3 pos,float r,float size,mat3 mr,float anim)
         ns=noise4q(vec4(pr*50.0,-anim*2.5+c*2.0))*2.0;
     }
     n=n*n*nd*ns;
-    
+
     return pow(s,4.0)+s*s*n;
 }
 
@@ -202,9 +174,9 @@ vec4 noiseSpace(vec3 ray,vec3 pos,float r,mat3 mr,float zoom,vec3 subnoise,float
 {
   	float b = dot(ray,pos);
   	float c = dot(pos,pos) - b*b;
-    
+
     vec3 r1=vec3(0.0);
-    
+
     float s=0.0;
     float d=0.0625*1.5;
     float d2=zoom/d;
@@ -235,7 +207,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	vec2 p = (-iResolution.xy + 2.0*fragCoord.xy) / iResolution.y;
 
     float time=iTime*1.0;
-    
+
 	float mx = iMouse.z>0.0?iMouse.x/iResolution.x*10.0:time*0.025;
     float my = iMouse.z>0.0?iMouse.y/iResolution.y*4.0-2.0:-0.6;
     vec2 rotate = vec2(mx,my);
@@ -243,24 +215,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 sins=sin(rotate);
     vec2 coss=cos(rotate);
     mat3 mr=mat3(vec3(coss.x,0.0,sins.x),vec3(0.0,1.0,0.0),vec3(-sins.x,0.0,coss.x));
-    mr=mat3(vec3(1.0,0.0,0.0),vec3(0.0,coss.y,sins.y),vec3(0.0,-sins.y,coss.y))*mr;    
+    mr=mat3(vec3(1.0,0.0,0.0),vec3(0.0,coss.y,sins.y),vec3(0.0,-sins.y,coss.y))*mr;
 
     mat3 imr=mat3(vec3(coss.x,0.0,-sins.x),vec3(0.0,1.0,0.0),vec3(sins.x,0.0,coss.x));
     imr=imr*mat3(vec3(1.0,0.0,0.0),vec3(0.0,coss.y,-sins.y),vec3(0.0,sins.y,coss.y));
-	
+
     vec3 ray = normalize(vec3(p,2.0));
     vec3 pos = vec3(0.0,0.0,3.0);
-    
+
     float s1=noiseSpere(ray,pos,1.0,mr,0.5,vec3(0.0),time);
     s1=pow(min(1.0,s1*2.4),2.0);
     float s2=noiseSpere(ray,pos,1.0,mr,4.0,vec3(83.23,34.34,67.453),time);
     s2=min(1.0,s2*2.2);
     fragColor = vec4( mix(vec3(1.0,1.0,0.0),vec3(1.0),pow(s1,60.0))*s1, 1.0 );
     fragColor += vec4( mix(mix(vec3(1.0,0.0,0.0),vec3(1.0,0.0,1.0),pow(s2,2.0)),vec3(1.0),pow(s2,10.0))*s2, 1.0 );
-	
+
     fragColor.xyz -= vec3(ring(ray,pos,1.03,11.0))*2.0;
     fragColor = max( vec4(0.0), fragColor );
-    
+
     float s3=ringRayNoise(ray,pos,0.96,1.0,mr,time);
     fragColor.xyz += mix(vec3(1.0,0.6,0.1),vec3(1.0,0.95,1.0),pow(s3,3.0))*s3;
 
@@ -276,23 +248,23 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     	//fragColor.xyz += (vec3(0.0,0.0,1.0)*s4*0.6+vec3(0.9,0.0,1.0)*s5*0.3)*sphereZero(ray,pos,0.9);
     	fragColor.xyz += mix(mix(vec3(1.0,0.0,0.0),vec3(0.0,0.0,1.0),s4.y*1.9),vec3(0.9,1.0,0.1),s4.w*0.75)*s4.x*pow(s4.z*2.5,3.0)*0.2*zero;
     	//fragColor.xyz += (mix(mix(vec3(1.0,0.0,0.0),vec3(0.0,0.0,1.0),s4*3.0),vec3(1.0),pow(s4*2.0,4.0))*s4*0.6)*sphereZero(ray,pos,0.9);
-        
-        
+
+
 		/*float b = dot(ray,pos);
   		float c = dot(pos,pos) - b*b;
     	float l1 = sqrt(abs(10.0-c));
     	vec3 spos = (ray*(b-l1))*mr;
         vec3 sposr=ceil(spos)+spos/abs(spos)*0.5;
         //sposr+=hpos(sposr)*0.2;
-        
+
         float ss3=max(0.0,ringRayNoise(ray,(sposr)*imr,0.001,10.0,mr,time));
         fragColor.xyz += vec3(ss3);*/
     }
-    
+
     //fragColor = max( vec4(0.0), fragColor );
     //s+=noiseSpere(ray,vec3(0.0,0.0,3.0),0.96,vec2(mx+1.4,my),vec3(83.23,34.34,67.453));
     //s+=noiseSpere(ray,vec3(0.0,0.0,3.0),0.90,vec2(mx,my),vec3(123.223311,956.34,7.45333))*0.6;
-    
+
     fragColor = max( vec4(0.0), fragColor );
 	fragColor = min( vec4(1.0), fragColor );
 }
@@ -342,7 +314,7 @@ Shader "Space/Star/Sun"
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma target 4.0
-			
+
 			#include "UnityCG.cginc"
 
 			struct appdata
@@ -381,10 +353,10 @@ Shader "Space/Star/Sun"
 			float _Seed;
 
 			float4 posGlob; // center position
-									
+
 			v2f vert (appdata v)
 			{
-				v2f o;		
+				v2f o;
 				posGlob = float4(UNITY_MATRIX_MV[0].w, UNITY_MATRIX_MV[1].w, UNITY_MATRIX_MV[2].w,0);
 				float3x3 r=transpose((float3x3)UNITY_MATRIX_MV);
 				float3x3 m;
@@ -393,7 +365,7 @@ Shader "Space/Star/Sun"
 				m[0]=normalize(cross(m[1],m[2]));
 				o.uv1 = mul(transpose(m), (float3)v.vertex);
             	o.vertex = mul(UNITY_MATRIX_MVP, float4(o.uv1, 1.0));
-				
+
 				#if UNITY_5_0
 				UNITY_TRANSFER_FOG(o,o.vertex);
 				#endif
@@ -413,16 +385,16 @@ Shader "Space/Star/Sun"
 				p2 = b + frac((p2+1)*0.00390625)*fixed4(164352.0, -164352.0, 163840.0, -163840.0);
 				fixed4 f1 = frac(x.xxxx+n3);
 				fixed4 f2 = frac(x.yyyy+n3);
-				
+
 				fixed4 n1 = fixed4(0,1.0,157.0,158.0);
-				fixed4 n2 = fixed4(113.0,114.0,270.0,271.0);		
+				fixed4 n2 = fixed4(113.0,114.0,270.0,271.0);
 				fixed4 vs1 = lerp(hash4(p1), hash4(n1.yyyy+p1), f1);
 				fixed4 vs2 = lerp(hash4(n1.zzzz+p1), hash4(n1.wwww+p1), f1);
 				fixed4 vs3 = lerp(hash4(p2), hash4(n1.yyyy+p2), f1);
-				fixed4 vs4 = lerp(hash4(n1.zzzz+p2), hash4(n1.wwww+p2), f1);	
+				fixed4 vs4 = lerp(hash4(n1.zzzz+p2), hash4(n1.wwww+p2), f1);
 				vs1 = lerp(vs1, vs2, f2);
 				vs3 = lerp(vs3, vs4, f2);
-				
+
 				vs2 = lerp(hash4(n2.xxxx+p1), hash4(n2.yyyy+p1), f1);
 				vs4 = lerp(hash4(n2.zzzz+p1), hash4(n2.wwww+p1), f1);
 				vs2 = lerp(vs2, vs4, f2);
@@ -431,14 +403,14 @@ Shader "Space/Star/Sun"
 				vs4 = lerp(vs4, vs5, f2);
 				f1 = frac(x.zzzz+n3);
 				f2 = frac(x.wwww+n3);
-				
+
 				vs1 = lerp(vs1, vs2, f1);
 				vs3 = lerp(vs3, vs4, f1);
 				vs1 = lerp(vs1, vs3, f2);
-				
+
 				return dot(vs1,0.25);
 			}
-					
+
 			float RayProj;
 			float sqRadius; // sphere radius
 			float fragTime;
@@ -476,7 +448,7 @@ Shader "Space/Star/Sun"
 				sqRadius = _Radius*_Radius;
 				if (RayProj<=0.0) sphere=sqRadius;
 				float3 pr = ray*abs(RayProj) - (float3)posGlob;
-				
+
 				if (sqDist<=sqRadius) {
 					surfase=-posGlob;
 					sphere=sqDist;
@@ -520,7 +492,7 @@ Shader "Space/Star/Sun"
 				if (sphere < sqRadius) col.w = 1.0-s3*dr;
 				if (sqDist>sqRadius)
 					col.xyz = col.xyz+lerp((fixed3)_Ray, (fixed3)_RayLight, s3*s3*s3)*s3; //pow(s3, 3.0)
-				
+
 				col = clamp(col, 0, 1);
 
 #if UNITY_5_0

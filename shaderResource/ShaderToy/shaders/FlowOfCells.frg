@@ -1,30 +1,4 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
 
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture; //s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture //s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
 // Created by sofiane benchaa - sben/2015
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 #define FIELD 20.0

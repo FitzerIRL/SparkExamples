@@ -1,33 +1,3 @@
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-#ifdef GL_ES
-    precision mediump float;
-#endif
-
-uniform vec2        u_resolution;
-uniform vec4        u_mouse;
-
-uniform float       u_time;
-uniform sampler2D   s_texture;
-
-#define iResolution u_resolution
-#define iTime       u_time
-#define iChannel0   s_texture
-
-// #define fragCoord   gl_FragCoord
-// #define fragColor   gl_FragColor
-#define iMouse      u_mouse
-
-#define texture     texture2D
-#define textureLod  texture2D
-
-void mainImage(out vec4, in vec2);
-void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
-
-
 
 // Rolling hills. By David Hoskins, November 2013.
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -95,7 +65,7 @@ vec2 Voronoi( in vec2 x )
 		{
 			res = d;
 			id  = Hash(p+b);
-		}			
+		}
     }
 	return vec2(max(.4-sqrt(res), 0.0),id);
 }
@@ -193,14 +163,14 @@ vec3 GrassBlades(in vec3 rO, in vec3 rD, in vec3 mat, in float dist)
 	// Only calculate cCoC once is enough here...
 	float rCoC = CircleOfConfusion(dist*.3);
 	float alpha = 0.0;
-	
+
 	vec4 col = vec4(mat*0.15, 0.0);
 
 	for (int i = 0; i < 15; i++)
 	{
 		if (col.w > .99) break;
 		vec3 p = rO + rD * d;
-		
+
 		vec3 ret = DE(p);
 		ret.x += .5 * rCoC;
 
@@ -282,7 +252,7 @@ bool Scene(in vec3 rO, in vec3 rD, out float resT, out float type )
 			hit = true;
             break;
 		}
-	        
+
 		delta = h.x + (t*0.03);
 		oldT = t;
 		t += delta;
@@ -298,21 +268,21 @@ vec3 CameraPath( float t )
 	//t = time + t;
     vec2 p = vec2(200.0 * sin(3.54*t), 200.0 * cos(2.0*t) );
 	return vec3(p.x+55.0,  12.0+sin(t*.3)*6.5, -94.0+p.y);
-} 
+}
 
 //--------------------------------------------------------------------------
 vec3 PostEffects(vec3 rgb, vec2 xy)
 {
 	// Gamma first...
 	rgb = pow(rgb, vec3(0.45));
-	
+
 	// Then...
 	#define CONTRAST 1.1
 	#define SATURATION 1.3
 	#define BRIGHTNESS 1.3
 	rgb = mix(vec3(.5), mix(vec3(dot(vec3(.2125, .7154, .0721), rgb*BRIGHTNESS)), rgb*BRIGHTNESS, SATURATION), CONTRAST);
 	// Vignette...
-	rgb *= .4+0.5*pow(40.0*xy.x*xy.y*(1.0-xy.x)*(1.0-xy.y), 0.2 );	
+	rgb *= .4+0.5*pow(40.0*xy.x*xy.y*(1.0-xy.x)*(1.0-xy.y), 0.2 );
 	return rgb;
 }
 
@@ -324,7 +294,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 xy = fragCoord.xy / iResolution.xy;
 	vec2 uv = (-1.0 + 2.0 * xy) * vec2(iResolution.x/iResolution.y,1.0);
 	vec3 camTar;
-	
+
 	if (xy.y < .13 || xy.y >= .87)
 	{
 		// Top and bottom cine-crop - what a waste! :)
@@ -341,7 +311,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	camTar	 = CameraPath(gTime + .009);
 	cameraPos.y += Terrain(CameraPath(gTime + .009).xz).x;
 	camTar.y = cameraPos.y;
-	
+
 	float roll = .4*sin(gTime+.5);
 	vec3 cw = normalize(camTar-cameraPos);
 	vec3 cp = vec3(sin(roll), cos(roll),0.0);
@@ -378,7 +348,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 		// Get the colour using all available data...
 		col = TerrainColour(pos, dir, nor, distance, type);
 	}
-	
+
 	// bri is the brightness of sun at the centre of the camera direction.
 	// Yeah, the lens flares is not exactly subtle, but it was good fun making it.
 	float bri = dot(cw, sunLight)*.75;
@@ -401,12 +371,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 		col += bri * vec3(1.0, 1.0, 0.2) * pow(glare2, 2.0)*2.5;
 		col += bri * sunColour * pow(glare3, 2.0)*3.0;
 	}
-	col = PostEffects(col, xy);	
-	
-	#ifdef STEREO	
-	col *= vec3( isCyan, 1.0-isCyan, 1.0-isCyan );	
+	col = PostEffects(col, xy);
+
+	#ifdef STEREO
+	col *= vec3( isCyan, 1.0-isCyan, 1.0-isCyan );
 	#endif
-	
+
 	fragColor=vec4(col,1.0);
 }
 
