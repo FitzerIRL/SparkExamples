@@ -53,12 +53,6 @@ px.import({       scene: 'px:scene.1.js',
 
   var toys = [
 
-    "MandelbrotDistance.frg",
-    "MandelbrotDistance.frg",
-    "MandelbrotDistance.frg",
-
-
-
       "PlanetShadertoy.frg",
       "TheHomeDrive.frg",
       "FlowOfCells.frg",
