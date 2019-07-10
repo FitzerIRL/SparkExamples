@@ -32,9 +32,7 @@ px.import({       scene: 'px:scene.1.js',
   var fooRGBA = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
   var fooGRAY = scene.create({ t: 'image', parent: rect, resource: noiseGRAY, x: 0, y: 0, interactive: false, a: 0.01 });
 
-  var header = `////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                #ifdef GL_ES
+  var header = `#ifdef GL_ES
                     precision mediump float;
                 #endif
 
@@ -48,20 +46,18 @@ px.import({       scene: 'px:scene.1.js',
                 #define iTime       u_time
                 #define iChannel0   s_texture
 
-                // #define fragCoord   gl_FragCoord
-                // #define fragColor   gl_FragColor
                 #define iMouse      u_mouse
-
                 #define texture     texture2D
                 #define textureLod  texture2D
-
-                // void mainImage(out vec4, in vec2);
-                // void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
                 `;
 
   var toys = [
+
+    "MandelbrotDistance.frg",
+    "MandelbrotDistance.frg",
+    "MandelbrotDistance.frg",
+
+
 
       "PlanetShadertoy.frg",
       "TheHomeDrive.frg",
@@ -183,6 +179,11 @@ px.import({       scene: 'px:scene.1.js',
     var fileLoadPromise = px.getModuleFile("/shaders/" + filename);
     fileLoadPromise.then(function(shader)
     {
+//      console.log("\n\n SHADER SHADER SHADER = ["+shader+"]");
+
+      // NB: Strip UNICODE characters
+      shader = shader.toString().replace(/[^\x00-\x7F]/g, "");
+
       var main = `void mainImage(out vec4, in vec2);
                   void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }`;
 
