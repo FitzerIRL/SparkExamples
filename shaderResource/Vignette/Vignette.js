@@ -134,7 +134,7 @@ px.import({       scene: 'px:scene.1.js'
 
   var title_obj = scene.create({ t: 'object',  parent:        bg, x: bg.w/2, y: 70, w: 600 + 80,    h: 50+ 80, px: 0.5, py: 0.5 });
   var title     = scene.create({ t: 'textBox', parent: title_obj, x: 0,      y:   0, w: title_obj.w, h: title_obj.h,
-                      pixelSize: 60, textColor: '#000', text:  'Vingette Tests', interactive: false,
+                      pixelSize: 60, textColor: '#000', text:  'Vignette Tests', interactive: false,
                       alignVertical:   scene.alignVertical.CENTER,
                       alignHorizontal: scene.alignHorizontal.CENTER});
 
