@@ -52,7 +52,6 @@ px.import({       scene: 'px:scene.1.js',
                 `;
 
   var toys = [
-
       "PlanetShadertoy.frg",
       "TheHomeDrive.frg",
       "FlowOfCells.frg",
@@ -176,7 +175,7 @@ px.import({       scene: 'px:scene.1.js',
 //      console.log("\n\n SHADER SHADER SHADER = ["+shader+"]");
 
       // NB: Strip UNICODE characters
-      shader = shader.toString().replace(/[^\x00-\x7F]/g, "");
+      //shader = shader.toString().replace(/[^\x00-\x7F]/g, "");
 
       var main = `void mainImage(out vec4, in vec2);
                   void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }`;

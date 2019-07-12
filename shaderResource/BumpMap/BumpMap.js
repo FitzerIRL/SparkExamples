@@ -71,14 +71,14 @@ px.import({       scene: 'px:scene.1.js'
     uniforms:
     {
         // texture samplers
-        "s_texture" : "sampler2D",   // diffuse map
-        "s_normals" : "sampler2D",   // normal map
+        s_texture      : "sampler2D",   // diffuse map
+        s_normals      : "sampler2D",   // normal map
 
         // values used for shading algorithm...
-        "u_lightPos"     : "vec3",    // light position, normalized
-        "u_lightColor"   : "vec4",    // light RGBA -- alpha is intensity
-        "u_ambientColor" : "vec4",    // ambient RGBA -- alpha is intensity
-        "u_falloff"      : "vec3"     // attenuation coefficients
+        u_lightPos     : "vec3",    // light position, normalized
+        u_lightColor   : "vec4",    // light RGBA -- alpha is intensity
+        u_ambientColor : "vec4",    // ambient RGBA -- alpha is intensity
+        u_falloff      : "vec3"     // attenuation coefficients
 
     } });
 
