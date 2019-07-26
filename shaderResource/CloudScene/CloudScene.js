@@ -10,8 +10,7 @@ px.import({       scene: 'px:scene.1.js'
   var root  = imports.scene.root;
   var base  = px.getPackageBaseFilePath();
 
-  var hasShaders    = true;
-  var index         = 0;
+  var hasShaders = true;
 
   if( scene.capabilities                  == undefined ||
       scene.capabilities.graphics         == undefined ||
@@ -23,37 +22,36 @@ px.import({       scene: 'px:scene.1.js'
     throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
-  var URL = base + "/images/test-pattern.png";
+  var URL = base + "/images/CloudScene.png";
 
-  var noiseGRAY = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
-  var noiseRGBA = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
-  var imageRGB  = scene.create({ id: "image", t: 'imageResource', url: URL });
+  var noiseGRAY = scene.create({ t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
+  var noiseRGBA = scene.create({ t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
+  var imageRGBA = scene.create({ t: 'imageResource', url: URL });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  const STRETCH = scene.stretch.STRETCH;
 
   var ar = 16/9;
 
   var w1 = scene.w;
-  var h1 = w1 / ar * 1.1;
-
+  var h1 = w1 / ar * 1.0;
 
   var x1 = (scene.w) * 0.50;
   var y1 = (scene.h) * 0.50;
 
-  var bg     = scene.create({ t: 'object', parent: root,x: x1, y: y1, w: w1, h: h1, px: 0.5, py: 0.5, fillColor: '#000', interactive: true});
+  var bg        = scene.create({ t: 'rect',   parent: root, x: x1, y: y1, w: w1, h: h1, px: 0.5, py: 0.5, fillColor: '#126', interactive: false});
+  var clouds    = scene.create({ t: 'object', parent: root, x: x1, y: y1, w: w1, h: h1, px: 0.5, py: 0.5, fillColor: '#050', interactive: false});
+  var mountains = scene.create({ t: 'image',  parent: root, x: x1, y: y1, w: w1, h: h1, px: 0.5, py: 0.5, url: URL,          interactive: false });
 
-  var fooRGBA  = scene.create({ t: 'image', parent: bg, resource: noiseRGBA, interactive: false, a: 0.05 });
-  var fooGRAY  = scene.create({ t: 'image', parent: bg, resource: noiseGRAY, interactive: false, a: 0.05 });
-  var fooIMAGE = scene.create({ t: 'image', parent: bg, resource: imageRGB,  interactive: false, a: 0.01 });
+  var fooRGBA   = scene.create({ t: 'image', parent: bg, resource: noiseRGBA, interactive: false, a: 0.01 });
+  var fooGRAY   = scene.create({ t: 'image', parent: bg, resource: noiseGRAY, interactive: false, a: 0.01 });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  var toys = [
-      { filename: "DirtyOldCRT.frg",   texture0: noiseRGBA },
-  //  { filename: "VCRdistortion.frg", texture0: noiseGRAY },
-  ];
+  var cfg = {
+              filename: "CloudScene.frg",
+              texture0: noiseGRAY,
+              texture1: noiseRGBA
+            };
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -61,12 +59,20 @@ px.import({       scene: 'px:scene.1.js'
                     precision mediump float;
                 #endif
 
+                //
+                // Declare UNIFORMS ...
+                //
+
                 uniform vec2        u_resolution;
                 uniform vec4        u_mouse;
 
                 uniform float       u_time;
                 uniform sampler2D   s_texture0;
                 uniform sampler2D   s_texture1;
+
+                //
+                // Alias to ShaderToy norms ...
+                //
 
                 #define iResolution u_resolution
                 #define iTime       u_time
@@ -86,7 +92,7 @@ px.import({       scene: 'px:scene.1.js'
     return val instanceof Object;
   }
 
-  var crt = null;
+  var cloudShader = null;
 
   function LoadShader(shader)
   {
@@ -94,6 +100,10 @@ px.import({       scene: 'px:scene.1.js'
 
     var filename = isObject(shader) ? shader.filename : shader;
     var texture0 = isObject(shader) ? shader.texture0 ? shader.texture0 : null : null;
+    var texture1 = isObject(shader) ? shader.texture1 ? shader.texture1 : null : null;
+
+    console.log(" texture0: "  + texture0.url );
+    console.log(" texture1: "  + texture1.url );
 
     var fileLoadPromise = px.getModuleFile("/shaders/" + filename);
     fileLoadPromise.then(function(shader)
@@ -106,13 +116,13 @@ px.import({       scene: 'px:scene.1.js'
       // Append "compatibility" header and possible wrapper around "mainImage()" ... if used.
       var src = "data:text/plain," + header + (hasMainImage ? main : "") + shader;
 
-      CreateShader( src, texture0 );
+      CreateShader( src, texture0, texture1 );
     });
   }
 
-  function CreateShader(shader, texture0 = null)
+  function CreateShader(shader, texture0 = null, texture1 = null)
   {
-    crt = scene.create({
+    cloudShader = scene.create({
                 t: 'shaderResource',
           fragment: shader,
           uniforms:
@@ -123,16 +133,16 @@ px.import({       scene: 'px:scene.1.js'
           }
         });
 
-    crt.ready.then( () =>
+    cloudShader.ready.then( () =>
     {
-      bg.effect =
+      clouds.effect =
       {
           name:  "shaderToy",
-          shader: crt,
+          shader: cloudShader,
           uniforms:
           {
-            s_texture0: imageRGB,
-            s_texture1: noiseRGBA, // RANDOM
+            s_texture0: texture0, // RANDOM GRAY
+            s_texture1: texture1, // RANDOM RGB
           }
       }
     });
@@ -144,7 +154,7 @@ px.import({       scene: 'px:scene.1.js'
   {
     if(hasShaders == true)
     {
-      LoadShader(toys[index]);
+      LoadShader(cfg);
     }
   });
 
@@ -161,5 +171,5 @@ px.import({       scene: 'px:scene.1.js'
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 }).catch(function importFailed(err) {
-  console.error('Import for CRTeffect.js failed: ' + err);
+  console.error('Import for CloudScene.js failed: ' + err);
 });

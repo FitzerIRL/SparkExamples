@@ -74,7 +74,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	vec4 rand = texture(iChannel1, vec2(iTime * 0.01, iTime * 0.02));
 
 	color.r = texture(iChannel0, crt(colorshift(sd_uv, 0.025, rand.r), 2.0)).r;
-	color.g = texture(iChannel0, crt(colorshift(sd_uv, 0.01, rand.g), 2.0)).g;
+	color.g = texture(iChannel0, crt(colorshift(sd_uv, 0.01,  rand.g), 2.0)).g;
 	color.b = texture(iChannel0, crt(colorshift(sd_uv, 0.024, rand.b), 2.0)).b;
 
 	vec4 scanline_color = vec4(scanline(crt_uv));
