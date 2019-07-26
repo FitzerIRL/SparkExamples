@@ -43,7 +43,7 @@ Rendering a Fibonicci Game board using Spark.
 
 Example of a Gaussian Blur - 2 pass shader.
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BlurShader.png"  alt="Image of BlurShader" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BlurShader2.gif"  alt="Image of BlurShader" width="300">
 
 
 ## BumpMap -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/BumpMap)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BumpMap/BumpShader.js)
