@@ -71,3 +71,11 @@ Example of various Fragment Shaders from [ShaderToy.com](ShaderToy.com)
 * ### RainyBridge -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/RainyBridge.js)
 
 * ### Sanctuary -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/ShaderToy)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/ShaderToy/Sanctuary.js)
+
+
+## CRT Effect -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/CRTeffect)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/CRTeffect/CRTeffect.js)
+
+Example of a CRT effect from [ShaderToy.com](ShaderToy.com)
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/CRTeffect/CRTeffect.gif"  alt="Image of CRTeffect" width="300">
+
