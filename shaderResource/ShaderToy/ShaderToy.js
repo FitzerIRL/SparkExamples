@@ -7,9 +7,9 @@ px.import({       scene: 'px:scene.1.js',
   var keys  = imports.keys;
   var base  = px.getPackageBaseFilePath();
 
-  var hasShaders    = true;
-  var intervalTimer = null;
-  var index         = -1;
+  var hCENTER = scene.alignHorizontal.CENTER
+  var vCENTER = scene.alignVertical.CENTER
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if( scene.capabilities                  == undefined ||
       scene.capabilities.graphics         == undefined ||
@@ -21,30 +21,30 @@ px.import({       scene: 'px:scene.1.js',
     throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
-  var noiseGRAY = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
-  var noiseRGBA = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
-  var lichen    = scene.create({ id: "noise", t: 'imageResource', url: base + "/images/lichen.jpg" });
-
-//  var img = scene.create({ t: 'image', parent: root, resource: lichen, x: 0, y: 0, interactive: false });
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  var rect = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
-  var fooRGBA = scene.create({ t: 'image', parent: rect, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
-  var fooGRAY = scene.create({ t: 'image', parent: rect, resource: noiseGRAY, x: 0, y: 0, interactive: false, a: 0.01 });
+  var noiseGRAY = scene.create({ t: 'imageResource', url: base + "/images/Gray_Noise_Medium256x256.png" });
+  var noiseRGBA = scene.create({ t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
+  var stars     = scene.create({ t: 'imageResource', url: base + "/images/stars.jpg" });
+  var organic2  = scene.create({ t: 'imageResource', url: base + "/images/organic2.jpg" });
+
 
   var header = `#ifdef GL_ES
-                    precision mediump float;
+                  precision mediump float;
                 #endif
 
                 uniform vec2        u_resolution;
                 uniform vec4        u_mouse;
 
                 uniform float       u_time;
-                uniform sampler2D   s_texture;
+                uniform sampler2D   s_texture0;
+                uniform sampler2D   s_texture1;
 
+                #define mat2x2      mat2
                 #define iResolution u_resolution
                 #define iTime       u_time
-                #define iChannel0   s_texture
+                #define iChannel0   s_texture0
+                #define iChannel1   s_texture1
 
                 #define iMouse      u_mouse
                 #define texture     texture2D
@@ -52,6 +52,19 @@ px.import({       scene: 'px:scene.1.js',
                 `;
 
   var toys = [
+
+    // { filename: "FlightOverBespin.frg", texture0: noiseRGBA },
+
+//    { filename: "DoodlingSpeed.frg", texture0: noiseGRAY },
+
+// "HappyJumping.frg",  // ES 3.0 :(
+
+    { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
+
+    "FlightOverBespin.frg",
+
+    // { filename: "DoodlingSpeed.frg", texture0: noiseGRAY },
+
       "PlanetShadertoy.frg",
       "TheHomeDrive.frg",
       "FlowOfCells.frg",
@@ -103,18 +116,28 @@ px.import({       scene: 'px:scene.1.js',
     { filename: "RainierMood.frg",     texture0: noiseRGBA }
   ];
 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  var hasShaders    = true;
+  var intervalTimer = null;
+  var index         = -1;
+
+  var rect      = scene.create({ t: 'object',  parent: root, fillColor: '#0008', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
+
   var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w, h: 40, a: 0});
   var Caption   = scene.create({ t: 'textBox', w: rect.w, h: 40, parent: CaptionBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
-                      alignVertical:   scene.alignVertical.CENTER,
-                      alignHorizontal: scene.alignHorizontal.CENTER});
+                      alignHorizontal: hCENTER, alignVertical: vCENTER});
 
   var MessageBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: 10, y: 10, w: 120, h: 40, a: 0});
   var Message   = scene.create({ t: 'textBox', w: 120, h: 40, parent: MessageBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
-                      alignVertical:   scene.alignVertical.CENTER,
-                      alignHorizontal: scene.alignHorizontal.CENTER});
+                      alignHorizontal: hCENTER, alignVertical: vCENTER});
 
+  var fooRGBA    = scene.create({ t: 'image', parent: root, resource: noiseRGBA, x: 0, y: 0, interactive: false, a: 0.01 });
+  var fooGRAY    = scene.create({ t: 'image', parent: root, resource: noiseGRAY, x: 0, y: 0, interactive: false, a: 0.01 });
+  var fooSTARS   = scene.create({ t: 'image', parent: root, resource: stars,     x: 0, y: 0, interactive: false, a: 0.01 });
+  var fooORGANIC = scene.create({ t: 'image', parent: root, resource: organic2,  x: 0, y: 0, interactive: false, a: 0.01 });
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   function showHide(o)
@@ -163,7 +186,9 @@ px.import({       scene: 'px:scene.1.js',
   function LoadShader(shader)
   {
     var filename = isObject(shader) ? shader.filename : shader;
-    var texture0 = isObject(shader) ? shader.texture0 ? shader.texture0 : null : null;
+    var texture0 = isObject(shader) ? shader.texture0 : null;
+    var texture1 = isObject(shader) ? shader.texture1 : null;
+    var texture2 = isObject(shader) ? shader.texture2 : null;
 
     var name = filename.split('.').slice(0, -1).join('.')
 
@@ -172,11 +197,6 @@ px.import({       scene: 'px:scene.1.js',
     var fileLoadPromise = px.getModuleFile("/shaders/" + filename);
     fileLoadPromise.then(function(shader)
     {
-//      console.log("\n\n SHADER SHADER SHADER = ["+shader+"]");
-
-      // NB: Strip UNICODE characters
-      //shader = shader.toString().replace(/[^\x00-\x7F]/g, "");
-
       var main = `void mainImage(out vec4, in vec2);
                   void main(void) { mainImage(gl_FragColor, gl_FragCoord.xy); }`;
 
@@ -185,23 +205,35 @@ px.import({       scene: 'px:scene.1.js',
       // Append "compatibility" header and possible wrapper around "mainImage()" ... if used.
       var src = "data:text/plain," + header + (hasMainImage ? main : "") + shader;
 
-      CreateShader( src, texture0 );
+      CreateShader( src, texture0 , texture1, texture2 );
     });
   }
 
-  function CreateShader(shader, texture0 = null)
+  function CreateShader(shader,
+                        texture0 = null,
+                        texture1 = null,
+                        texture2 = null)
   {
-    shaderToy = scene.create({
-                t: 'shaderResource',
-          fragment: shader,
-          uniforms:
-          {
-            "u_time"      : "float",
-            "u_resolution": "vec2",
-            "u_mouse"     : "vec4",
-            "s_texture"   : "sampler2D"
-          }
-        });
+    var uniforms =
+    {
+      "u_time"      : "float",
+      "u_resolution": "vec2",
+      "u_mouse"     : "vec4"
+    }
+
+    // Add UNIFORMS if used ...
+    if(texture0) { uniforms[ "s_texture0" ] = "sampler2D"; }
+    if(texture1) { uniforms[ "s_texture1" ] = "sampler2D"; }
+    if(texture2) { uniforms[ "s_texture2" ] = "sampler2D"; }
+
+    var createCfg =
+    {
+      t: 'shaderResource',
+      fragment: shader,
+      uniforms: uniforms
+    };
+
+    shaderToy = scene.create( createCfg );
 
     shaderToy.ready.then( () =>
     {
@@ -212,11 +244,12 @@ px.import({       scene: 'px:scene.1.js',
         uniforms: {}
       };
 
-      if(texture0)
-      {
-        config.uniforms = { s_texture: texture0 };
-      }
+      // Configure UNIFORMS if used ...
+      if(texture0) { config.uniforms[ "s_texture0" ] = texture0; }
+      if(texture1) { config.uniforms[ "s_texture1" ] = texture1; }
+      if(texture2) { config.uniforms[ "s_texture2" ] = texture2; }
 
+      // Apply UNIFORMS ...
       rect.effect = config;
     });
   };
