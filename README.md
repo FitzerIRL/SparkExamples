@@ -39,6 +39,13 @@ Rendering a Fibonicci Game board using Spark.
 
 # Shader Resource
 
+## SparkSmoke -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/SparkSmoke)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/SparkSmoke/SparkSmoke.js)
+
+Example of a pxImage, pxText and pxShaderResource _dymanic_ scene.
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/SparkSmoke/SparkSmoke.gif"  alt="Image of SparkSmoke" width="300">
+
+
 ## BlurShader -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/shaderResource/BlurShader)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/shaderResource/BlurShader/BlurShader.js)
 
 Example of a Gaussian Blur - 2 pass shader.
