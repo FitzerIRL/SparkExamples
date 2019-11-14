@@ -1,75 +1,58 @@
-const webpack = require('webpack');
-const path    = require('path');
+const path       = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 let config = {
-    mode: 'development',
-    devtool: "inline-cheap-source-map",
+    mode: 'development',         // web-pack should default to 'development' build
+    watch: true,                        // web-pack watches for changes .. and re-builds
+    devtool: 'cheap-module-source-map', // cheap-source-map', //'source-map',
+
+    // optimization: {
+    //     runtimeChunk: false,     // seperate file for WebPack Bootstrap
+    // },
     entry:  [
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //
+        //  INPUT FILES
+        //
         path.resolve(__dirname, './index.js'),
     ],
-    output: {
-        filename: 'output.js'
+    node: {
+        fs: 'empty',
+        global:false,
+        process:false,
+        Buffer:false
     },
-    watch: true,
-    devServer: {
-        contentBase: path.join(__dirname, "./dist"),
-        publicPath:  path.join(__dirname, "./dist"),
-       // compress: true,
-        port: 80
-    },
-    module:
-    {
-        rules:
-        [
-        {
-            test: /\.(js)?$/i,
-            use: [
-            {
-                loader: 'spark-import-loader',
-                options: {
-                    base:
-                    {
-                        "base" : path.resolve(__dirname, './'),
-                        "base2": path.resolve(__dirname, './')
-                    }
-                }
-            }]
-        },
-        {
-            test: /\.(gif|png|jpe?g|svg)$/i,
-            use: [
-            {
-                loader: 'file-loader?name=/images/[name].[ext]',
-            },
-            {
-                loader: 'image-webpack-loader?name=/images/[name].[ext]',
-                options: {
-                bypassOnDebug: true, // webpack@1.x
-                disable: false, // webpack@2.x and newer
-                },
-            }]
-        },
-        {
-            test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-            use: [
-            {
-                loader: 'file-loader',
-                options: {
-                    name: '[name].[ext]',
-                    outputPath: 'fonts/'
-                }
-            }]
-        }
-        ]//rules
-    }//modules
-};
 
-config.resolve = {
-    alias:
-    {
-        images: path.resolve(__dirname, './images'),
-        base:   path.resolve(__dirname, './'),
-    }
-}
+        ////////////////////////////////////////////////////////////////////////////////
+        //
+        //  OUTPUT FILES
+        //
+        // optimization: {
+        //    // minimize: true,
+        //     moduleIds: 'named'
+        //   },
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'output.js',
+        publicPath: '/dist'
+
+    },
+    resolve: {
+        alias: {
+            root:    path.resolve(__dirname),
+            images:  path.resolve(__dirname, './images/'),
+            "px.getPackageBaseFilePath()": __dirname
+        }
+    },
+    ////////////////////////////////////////////////////////////////////////////////
+
+    plugins: [
+        // new CopyPlugin([
+        //     { from: 'images', to: 'images' },
+        // ])
+    ]
+    ////////////////////////////////////////////////////////////////////////////////
+};
 
 module.exports = config;

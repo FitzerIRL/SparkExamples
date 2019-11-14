@@ -1,12 +1,13 @@
+
+import EqualizerSVG from "./EqualizerSVG"
+
 px.import({
-     scene: 'px:scene.1.js',
-    equSVG: 'EqualizerSVG.js'
+     scene: 'px:scene.1.js'
+   // equSVG: 'root:EqualizerSVG.js'
 }).then( function importsAreReady(imports)
 {
     var scene = imports.scene;
     var root  = scene.root;
-
-    var EqualizerSVG = imports.equSVG;
 
     var blues = [
         { offset:   0, color: "#00b"},
@@ -65,6 +66,7 @@ px.import({
             }
         );
     })
+
 }).catch( function importFailed(err)
 {
     console.error("SVG >> Import failed for index.js: " + err);
