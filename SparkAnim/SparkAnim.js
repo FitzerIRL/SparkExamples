@@ -32,7 +32,8 @@ px.import({       scene: 'px:scene.1.js'
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  var       logo = scene.create({ t: 'object', parent: root, fillColor: "#0803", px: 0.5, py: 0.5, x: scene.w/2, y: scene.h/2, w: 500 * ff, h: 500 * ff, interactive: false, a: 0 });
+  var         bg = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 0, y: 0, w: scene.w, h: scene.h, interactive: false });
+  var       logo = scene.create({ t: 'object', parent: bg, fillColor: "#0803", px: 0.5, py: 0.5, x: scene.w/2, y: scene.h/2, w: 500 * ff, h: 500 * ff, interactive: false, a: 0 });
   var  hexes_obj = scene.create({ t: 'object', parent: logo, fillColor: "#ffF8", px: 0.5, py: 0.5, x:  logo.w/2, y:  logo.h/2, w: 500 * ff, h: 500 * ff, interactive: false });
 
   var orange_obj = scene.create({ t: 'object', parent:  hexes_obj, w: ww, h: hh,                       interactive: false });

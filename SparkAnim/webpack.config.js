@@ -24,20 +24,6 @@ let config = {
     {
         rules:
         [
-        {
-            test: /\.(js)?$/i,
-            use: [
-            {
-                loader: 'spark-import-loader',
-                options: {
-                    base:
-                    {
-                        "base" : path.resolve(__dirname, './'),
-                        "base2": path.resolve(__dirname, './')
-                    }
-                }
-            }]
-        },
         ////////////////////////////////////////////////////////////////////////////////
         {
             test: /\.(gif|png|jpe?g|svg)$/i,
@@ -70,9 +56,9 @@ let config = {
     ////////////////////////////////////////////////////////////////////////////////
     plugins: 
     [
-        new CopyPlugin([
-            { from: 'images', to: 'images' },
-        ]),
+        // new CopyPlugin([
+        //     { from: 'images', to: 'images' },
+        // ]),
     ]
 };
 
