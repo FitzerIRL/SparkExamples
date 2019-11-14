@@ -49,8 +49,9 @@ woffRes.ready.then(function() {
 // ###############################################
 // ###############################################
 
+  var bg = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 0, y: 0, w: scene.w, h: scene.h, interactive: false }); 
   // var fontRes   = woffRes;//scene.create({ t: "fontResource", url: "FreeSans.ttf" });
-  var container = scene.create({ t: "object", parent: root,  x: 0, y: 0, w: 800, h: 600 });
+  var container = scene.create({ t: "object", parent: bg,  x: 0, y: 0, w: 800, h: 600 });
 
   // --------------------------------------------------------------------------------------------------------------
 
