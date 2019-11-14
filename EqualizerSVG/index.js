@@ -9,6 +9,8 @@ px.import({
     var scene = imports.scene;
     var root  = scene.root;
 
+    var bg = scene.create({ t: 'rect', parent: root, fillColor: '#000', x: 0, y: 0, w: scene.w, h: scene.h, interactive: false });
+
     var blues = [
         { offset:   0, color: "#00b"},
         { offset:  25, color: "#00b"},
@@ -37,15 +39,15 @@ px.import({
     [
        // { parent: root, x:   150, y:   2, w: 900, h: 600, t: 300, rows: 10, cols:  20, grid:  5, bg: "#101", zero: 1 },
 
-        { parent: root, x:   2, y:   2, w: 422, h: 236, t: 300, rows: 10, cols:  20, grid:  5, bg: "#101" },
-        { parent: root, x: 428, y:   2, w: 422, h: 236, t: 300, rows:  5, cols:   9, grid:  6, bg: "#222222" },
-        { parent: root, x: 854, y:   2, w: 422, h: 236, t: 300, rows: 60, cols: 120, grid:  2, bg: "#111" },
-        { parent: root, x:   2, y: 242, w: 422, h: 236, t: 300, rows: 20, cols:  40, grid:  5, bg: "#121" },
-        { parent: root, x: 428, y: 242, w: 422, h: 236, t: 300, rows: 50, cols:  20, grid:  2, bg: "#202220" },
-        { parent: root, x: 854, y: 242, w: 422, h: 236, t: 400, rows: 40, cols:  20, grid:  4, bg: "#101" },
-        { parent: root, x:   2, y: 482, w: 422, h: 236, t: 300, rows: 5,  cols:   8, grid:  5, bg: "#449", stops: blues},
-        { parent: root, x: 428, y: 482, w: 422, h: 236, t: 300, rows: 30, cols:  25, grid:  2, bg: "#595", stops: greens},
-        { parent: root, x: 854, y: 482, w: 422, h: 236, t: 400, rows: 10, cols:   5, grid: 12, bg: "#966", stops: reds },
+        { parent: bg, x:   2, y:   2, w: 422, h: 236, t: 300, rows: 10, cols:  20, grid:  5, bg: "#101" },
+        { parent: bg, x: 428, y:   2, w: 422, h: 236, t: 300, rows:  5, cols:   9, grid:  6, bg: "#222222" },
+        { parent: bg, x: 854, y:   2, w: 422, h: 236, t: 300, rows: 60, cols: 120, grid:  2, bg: "#111" },
+        { parent: bg, x:   2, y: 242, w: 422, h: 236, t: 300, rows: 20, cols:  40, grid:  5, bg: "#121" },
+        { parent: bg, x: 428, y: 242, w: 422, h: 236, t: 300, rows: 50, cols:  20, grid:  2, bg: "#202220" },
+        { parent: bg, x: 854, y: 242, w: 422, h: 236, t: 400, rows: 40, cols:  20, grid:  4, bg: "#101" },
+        { parent: bg, x:   2, y: 482, w: 422, h: 236, t: 300, rows: 5,  cols:   8, grid:  5, bg: "#449", stops: blues},
+        { parent: bg, x: 428, y: 482, w: 422, h: 236, t: 300, rows: 30, cols:  25, grid:  2, bg: "#595", stops: greens},
+        { parent: bg, x: 854, y: 482, w: 422, h: 236, t: 400, rows: 10, cols:   5, grid: 12, bg: "#966", stops: reds },
     ];
 
     styles.map( (s, i) =>
