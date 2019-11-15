@@ -44,7 +44,7 @@ var woffUrl = "https://fonts.gstatic.com/s/kaushanscript/v6/vm8vdRfvXFLG3OLnsO15
 var woffRes = scene.create({ t: "fontResource", url: woffUrl});
 
 woffRes.ready.then(function() {
-  console.log("here");
+  // console.log("here");
 })
 // ###############################################
 // ###############################################
@@ -136,18 +136,19 @@ woffRes.ready.then(function() {
     var screenBG    = scene.create({ t:"image", parent: container, url: base + "/images/bg.jpg",  draw: false });
     var screenBlack = scene.create({ t:"rect",  parent: screenBG,  w: w, h: h, fillColor: "#008", a: 0 });
 
-    var msg = scene.create({ t: "text", parent: container, font: woffRes, interactive: false, pixelSize: 110, w: 400, h:100, text: "Happy Thanksgiving !", fillColor: "#fff" });
+    var msg = scene.create({ t: "text", parent: container, font: woffRes, interactive: false, pixelSize: 110, w: 400, h:100, px: 0.5, py: 0.5, text: "Happy Thanksgiving !", fillColor: "#fff", draw: false });
 
     return Promise.all([ screenBG.ready, msg.ready ])
                 .catch( (err) =>
                 {
-                console.log("SVG >> Creating Slide ... err = " + err);
+                  console.log("SVG >> Creating Slide ... err = " + err);
                 })
                 .then( (success, failure) =>
                 {
                   screenBG.draw = true;
+                  msg.draw = true;
 
-                  msg.x = (w - msg.w) /2;
+                  msg.x = (w/2);
                   msg.y = 130;
                 });
   }
@@ -156,9 +157,12 @@ woffRes.ready.then(function() {
 
   function updateSize(w, h)
   {
-    createBGscreen(w,h);
+    var ready = createBGscreen(w,h);
 
-    createFlakes(w,h);
+    ready.then( () =>
+    {
+      createFlakes(w,h);
+    })
 
     container.w = w;
     container.h = h;
@@ -166,8 +170,8 @@ woffRes.ready.then(function() {
 
   // --------------------------------------------------------------------------------------------------------------
 
-  scene.on("onResize", function(e) {  updateSize(e.w,e.h); layout(); });
-  scene.on("onClose", function(e)  { });  // cleanup
+  scene.on("onResize", function(e) {  updateSize(e.w,e.h); });
+  scene.on("onClose",  function(e)  { });  // cleanup
 
   // --------------------------------------------------------------------------------------------------------------
 
