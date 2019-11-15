@@ -145,11 +145,15 @@ woffRes.ready.then(function() {
                 })
                 .then( (success, failure) =>
                 {
+                  container.a = 0;
+
                   screenBG.draw = true;
                   msg.draw = true;
 
                   msg.x = (w/2);
                   msg.y = 130;
+
+                  container.animateTo({a: 1.0 }, 1.5);
                 });
   }
 
