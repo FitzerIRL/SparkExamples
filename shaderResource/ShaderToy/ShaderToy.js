@@ -51,13 +51,16 @@ px.import({       scene: 'px:scene.1.js',
                 #define textureLod  texture2D
                 `;
 
-  var toys = [
+  var toys =
+  [
 
     // { filename: "FlightOverBespin.frg", texture0: noiseRGBA },
 
 //    { filename: "DoodlingSpeed.frg", texture0: noiseGRAY },
 
 // "HappyJumping.frg",  // ES 3.0 :(
+
+    "WarpVortex.frg",
 
     { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
 
@@ -122,9 +125,9 @@ px.import({       scene: 'px:scene.1.js',
   var intervalTimer = null;
   var index         = -1;
 
-  var rect      = scene.create({ t: 'object',  parent: root, fillColor: '#0008', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, focus: true});
+  var rect      = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: 10, y: 10, w: scene.w - 20, h: scene.h - 20, cx: (scene.w-20)/2, cy: (scene.h-20)/2, focus: true});
 
-  var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w, h: 40, a: 0});
+  var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w/2, h: 40, a: 0});
   var Caption   = scene.create({ t: 'textBox', w: rect.w, h: 40, parent: CaptionBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
                       alignHorizontal: hCENTER, alignVertical: vCENTER});
@@ -359,13 +362,20 @@ px.import({       scene: 'px:scene.1.js',
 
   function updateSize(w, h)
   {
-    rect.w = w - 10;
-    rect.h = h - 10;
+    rect.w = w - 20;
+    rect.h = h - 20;
 
+    CaptionBG.x = rect.w/2;
     Caption.w   = rect.w;
     CaptionBG.w = rect.w;
     CaptionBG.y = rect.h - 50;
   }
+
+  // Promise.all([rect.ready, CaptionBG.ready, Caption.ready, MessageBG.ready, Message.ready,
+  //              fooRGBA.ready, fooGRAY.ready, fooSTARS.ready, fooORGANIC.ready ]).then( () =>
+  // {
+  //   //showCaption(0, "Starting");
+  // })
 
   // rect.ready.then( () =>
   // {

@@ -15,8 +15,11 @@ px.import({       scene: 'px:scene.1.js'
     throw "EXPCEPTION - Shaders are not supported in this version of Spark..."
   }
 
-  var rock   = scene.create({ id: "rock",  t: 'imageResource', url: base + "/rock.png"   });
-  var rock_n = scene.create({ id: "roc_n", t: 'imageResource', url: base + "/rock_n.png" });
+  // var rock   = scene.create({ id: "rock",  t: 'imageResource', url: base + "/images/rock.png"   });
+  // var rock_n = scene.create({ id: "roc_n", t: 'imageResource', url: base + "/images/rock_n.png" });
+
+  var rock   = scene.create({ id: "rock",  t: 'imageResource', url: base + "/images/Spark_logo300px.png"   });
+  var rock_n = scene.create({ id: "roc_n", t: 'imageResource', url: base + "/images/Spark_logo300px_n.png" });
 
   var rect   = scene.create({ t: 'rect',  parent: root, fillColor: '#222', x: 10, y: 10, w: 1260, h: 700, cx: 1260/2, cy: 700/2, interactive: false});
   var output = scene.create({ t: 'rect', parent: rect, x: 700, y: 250, w: 300, h: 225, fillColor: "#888", lineColor: "#fff", lineWidth: 2, focus: true });
@@ -81,6 +84,20 @@ px.import({       scene: 'px:scene.1.js'
         u_falloff      : "vec3"     // attenuation coefficients
 
     } });
+
+    bumpShader.ready.then(
+      (resolve) =>
+      {
+        console.log("Shader Compilation - OK");
+        console.log("Shader Compilation - OK");
+        console.log("Shader Compilation - OK");
+      },
+      (reject) =>
+      {
+        console.log("Shader Compilation - FAILED " + bumpShader.loadStatus.glError );
+        console.log("Shader Compilation - FAILED " + bumpShader.loadStatus.glError );
+        console.log("Shader Compilation - FAILED " + bumpShader.loadStatus.glError );
+      });
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

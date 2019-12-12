@@ -1,3 +1,7 @@
+#ifdef GL_ES
+    precision mediump float;
+#endif
+
 varying vec2  v_uv;
 
 uniform vec2      u_resolution;

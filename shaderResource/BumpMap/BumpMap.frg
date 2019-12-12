@@ -1,4 +1,8 @@
 
+#ifdef GL_ES
+    precision mediump float;
+#endif
+
 // attributes from vertex shader
 varying vec2 v_uv;
 
@@ -47,8 +51,6 @@ void main()
 	// the calculation which brings it all together
   vec3 Intensity  = Ambient + Diffuse * Attenuation;
 	vec3 FinalColor = DiffuseColor.rgb * Intensity;
-
-	// FinalColor.rgb *=  DiffuseColor.a; // JUNK
 
 	gl_FragColor = vec4(FinalColor, DiffuseColor.a);
 }
