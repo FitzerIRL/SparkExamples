@@ -1,6 +1,6 @@
 
 
-#define pi  3.14159
+const float pi	 	= 3.14159;
 
 // from iq
 float expStep( float x, float k, float n )
