@@ -212,11 +212,11 @@ px.import({       scene: 'px:scene.1.js',
       // Append "compatibility" header and possible wrapper around "mainImage()" ... if used.
       var src = "data:text/plain," + header + (hasMainImage ? main : "") + shader;
 
-      CreateShader( src, texture0 , texture1, texture2 );
+      CreateShader( filename, src, texture0 , texture1, texture2 );
     });
   }
 
-  function CreateShader(shader,
+  function CreateShader(name, shader,
                         texture0 = null,
                         texture1 = null,
                         texture2 = null)
@@ -258,6 +258,11 @@ px.import({       scene: 'px:scene.1.js',
 
       // Apply UNIFORMS ...
       rect.effect = config;
+    })
+    .catch( (err) =>
+    {
+      console.error('Compilation of "'+ name +'" failed: ' + err.loadStatus.glError );
+      console.error('Compilation of "'+ shader +'" failed: ' + err.loadStatus.glError );
     });
   };
 
