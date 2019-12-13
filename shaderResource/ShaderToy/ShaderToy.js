@@ -7,6 +7,7 @@ px.import({       scene: 'px:scene.1.js',
   var keys  = imports.keys;
   var base  = px.getPackageBaseFilePath();
 
+  var hLEFT   = scene.alignHorizontal.LEFT
   var hCENTER = scene.alignHorizontal.CENTER
   var vCENTER = scene.alignVertical.CENTER
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -27,7 +28,6 @@ px.import({       scene: 'px:scene.1.js',
   var noiseRGBA = scene.create({ t: 'imageResource', url: base + "/images/RGBA_Noise_Medium256x256.png" });
   var stars     = scene.create({ t: 'imageResource', url: base + "/images/stars.jpg" });
   var organic2  = scene.create({ t: 'imageResource', url: base + "/images/organic2.jpg" });
-
 
   var header = `#ifdef GL_ES
                   precision mediump float;
@@ -62,9 +62,9 @@ px.import({       scene: 'px:scene.1.js',
 
   "GradientCircles.frg",
 
-    "WarpVortex.frg",
+  "WarpVortex.frg",
 
-    { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
+  { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
 
     "FlightOverBespin.frg",
 
@@ -127,9 +127,19 @@ px.import({       scene: 'px:scene.1.js',
   var intervalTimer = null;
   var index         = -1;
 
-  var rect      = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: 10, y: 10, w: scene.w - 20, h: scene.h - 20, cx: (scene.w-20)/2, cy: (scene.h-20)/2, focus: true});
+  var       url = base + "/images/Spark_logo20px.png";
 
-  var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 50, w: rect.w/2, h: 40, a: 0});
+  var rect      = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: 10, y: 10, w: scene.w - 5, h: scene.h - 5, cx: (scene.w-20)/2, cy: (scene.h-20)/2, focus: true});
+
+
+  var LogoBG    = scene.create({ t: 'rect',    parent: root,   x: (rect.w - 20), y: (rect.h - 20),  w: 160, h: 40, px: 1.0, py: 1.0, fillColor: '#0008' });
+  var LogoIMG   = scene.create({ t: 'image',   parent: LogoBG, x: (LogoBG.w - 15), y: (LogoBG.h /2),  w: 20,  h: 20, url: url, px: 1.0, py: 0.5 });
+  var LogoTXT   = scene.create({ t: 'textBox', parent: LogoBG, x: 20, w: LogoBG.w - 20, h: LogoBG.h,
+                      pixelSize: 18, textColor: '#fff', text: 'Powered by ', interactive: false,
+                      alignHorizontal: hLEFT, alignVertical: vCENTER});
+
+
+  var CaptionBG = scene.create({ t: 'rect', parent: root, fillColor: '#0008', x: scene.w/2, y: rect.h - 20, w: rect.w/2, h: 40, px: 0.5, py: 1.0, a: 0});
   var Caption   = scene.create({ t: 'textBox', w: rect.w, h: 40, parent: CaptionBG, a: 1,
                       pixelSize: 24, textColor: '#fff', text: '...', interactive: false,
                       alignHorizontal: hCENTER, alignVertical: vCENTER});
@@ -153,7 +163,7 @@ px.import({       scene: 'px:scene.1.js',
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  function showCaption(index, txt, x = 0.5, y = (rect.h - 50) )
+  function showCaption(index, txt)
   {
     Caption.text = (index + 1) + ". " + txt;
 
@@ -166,14 +176,6 @@ px.import({       scene: 'px:scene.1.js',
 
       Caption.w   = CaptionBG.w;
       Caption.h   = CaptionBG.h;
-
-      CaptionBG.x = x;
-      CaptionBG.x = y;
-
-      if(x == 0.5)
-      {
-        CaptionBG.x = (scene.w - CaptionBG.w) / 2;
-      }
 
       showHide(CaptionBG);
     });
@@ -367,11 +369,16 @@ px.import({       scene: 'px:scene.1.js',
     rect.w = w - 20;
     rect.h = h - 20;
 
+    LogoBG.x    = (rect.w - 20);
+    LogoBG.y    = (rect.h - 20);
+
     CaptionBG.x = rect.w/2;
     Caption.w   = rect.w;
     CaptionBG.w = rect.w;
-    CaptionBG.y = rect.h - 50;
+    CaptionBG.y = rect.h - 20;
   }
+
+  updateSize(scene.w, scene.h)
 
   // Promise.all([rect.ready, CaptionBG.ready, Caption.ready, MessageBG.ready, Message.ready,
   //              fooRGBA.ready, fooGRAY.ready, fooSTARS.ready, fooORGANIC.ready ]).then( () =>
