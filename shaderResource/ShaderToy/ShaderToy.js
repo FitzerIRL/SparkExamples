@@ -60,6 +60,8 @@ px.import({       scene: 'px:scene.1.js',
 
 // "HappyJumping.frg",  // ES 3.0 :(
 
+  "GradientCircles.frg",
+
     "WarpVortex.frg",
 
     { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
