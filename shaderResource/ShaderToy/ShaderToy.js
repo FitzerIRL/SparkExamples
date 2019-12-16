@@ -86,20 +86,20 @@ px.import({       scene: 'px:scene.1.js',
     { filename: "Protophore.frg",              gpuHeavy: true  }, // ## HEAVY
     { filename: "GalaxyOfUniverses.frg",       gpuHeavy: true  }, // ## HEAVY
     { filename: "AwesomeStar.frg",             gpuHeavy: true  }, // ## HEAVY
-    { filename: "MandelbrotSmooth.frg",        gpuHeavy: false },
+    { filename: "MandelbrotSmooth.frg",        gpuHeavy: true  }, // ## HEAVY
     { filename: "Threads.frg",                 gpuHeavy: true  }, // ## HEAVY
     { filename: "ProteanClouds.frg",           gpuHeavy: true  }, // ## HEAVY
-    { filename: "GiveItMoire.frg",             gpuHeavy: false },
+    { filename: "GiveItMoire.frg",             gpuHeavy: true  }, // ## HEAVY
     { filename: "Seascape.frg",                gpuHeavy: true  }, // ## HEAVY
     { filename: "Creation.frg",                gpuHeavy: false },
     { filename: "Flame.frg",                   gpuHeavy: false },
-    { filename: "Warping.frg",                 gpuHeavy: false },
+    { filename: "Warping.frg",                 gpuHeavy: true  }, // ## HEAVY
     { filename: "Voronoise.frg",               gpuHeavy: false },
     { filename: "MengerSponge.frg",            gpuHeavy: true  }, // ## HEAVY
     { filename: "MandelbrotDistance.frg",      gpuHeavy: false },
     { filename: "BallofFire.frg",              gpuHeavy: false },
     { filename: "RayTracingSphereExample.frg", gpuHeavy: true  }, // ## HEAVY
-    { filename: "Bubbles.frg",                 gpuHeavy: false },
+    { filename: "Bubbles.frg",                 gpuHeavy: true  }, // ## HEAVY
     { filename: "OnOffSpikes.frg",             gpuHeavy: true  }, // ## HEAVY
     { filename: "DiskIntersection.frg",        gpuHeavy: true  }, // ## HEAVY
     { filename: "CubesAndSpheres.frg",         gpuHeavy: true  }, // ## HEAVY
