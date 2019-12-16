@@ -10,6 +10,16 @@ px.import({       scene: 'px:scene.1.js',
   var hLEFT   = scene.alignHorizontal.LEFT
   var hCENTER = scene.alignHorizontal.CENTER
   var vCENTER = scene.alignVertical.CENTER
+
+  var gpuHeavy = true;  // default to TRUE unless param set
+
+  if(px.appQueryParams.gpuHeavy != undefined)
+  {
+    gpuHeavy = (px.appQueryParams.gpuHeavy == "true");
+  }
+
+  console.log("INFO: Using gpuHeavy: " + gpuHeavy);
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   if( scene.capabilities                  == undefined ||
@@ -53,72 +63,57 @@ px.import({       scene: 'px:scene.1.js',
 
   var toys =
   [
+    { filename: "GradientCircles.frg",         gpuHeavy: false },
+    { filename: "WarpVortex.frg",              gpuHeavy: false },
+    { filename: "SpaceCurvature.frg",          gpuHeavy: true,  texture0: stars , texture1: organic2 },   // ## HEAVY
+    { filename: "FlightOverBespin.frg",        gpuHeavy: true  }, // ## HEAVY
+    { filename: "PlanetShadertoy.frg",         gpuHeavy: true  }, // ## HEAVY
+    { filename: "TheHomeDrive.frg",            gpuHeavy: true  }, // ## HEAVY
+    { filename: "FlowOfCells.frg",             gpuHeavy: false },
+    { filename: "GeodesicTiling.frg",          gpuHeavy: true  }, // ## HEAVY
+    { filename: "FluxCore.frg",                gpuHeavy: true  }, // ## HEAVY
+    { filename: "InfinityMatrixLite.frg",      gpuHeavy: false },
+    { filename: "ElectricSinusoid.frg",        gpuHeavy: false },
+    { filename: "LightsInSmoke.frg",           gpuHeavy: true  }, // ## HEAVY
+    { filename: "BokehTraffic.frg",            gpuHeavy: true  }, // ## HEAVY
+    { filename: "TambysSnowflakes.frg",        gpuHeavy: true  }, // ## HEAVY
+    { filename: "BokehBlur.frg",               gpuHeavy: true  }, // ## HEAVY
+    { filename: "UltraLiquidBokeh.frg",        gpuHeavy: true  }, // ## HEAVY
+    { filename: "TileableWaterCaustic.frg",    gpuHeavy: false },
+    { filename: "LiquidCubes.frg",             gpuHeavy: true  }, // ## HEAVY
+    { filename: "RaymarchedReflections.frg",   gpuHeavy: true  }, // ## HEAVY
+    { filename: "Supernovae.frg",              gpuHeavy: true  }, // ## HEAVY
+    { filename: "Protophore.frg",              gpuHeavy: true  }, // ## HEAVY
+    { filename: "GalaxyOfUniverses.frg",       gpuHeavy: true  }, // ## HEAVY
+    { filename: "AwesomeStar.frg",             gpuHeavy: true  }, // ## HEAVY
+    { filename: "MandelbrotSmooth.frg",        gpuHeavy: false },
+    { filename: "Threads.frg",                 gpuHeavy: true  }, // ## HEAVY
+    { filename: "ProteanClouds.frg",           gpuHeavy: true  }, // ## HEAVY
+    { filename: "GiveItMoire.frg",             gpuHeavy: false },
+    { filename: "Seascape.frg",                gpuHeavy: true  }, // ## HEAVY
+    { filename: "Creation.frg",                gpuHeavy: false },
+    { filename: "Flame.frg",                   gpuHeavy: false },
+    { filename: "Warping.frg",                 gpuHeavy: false },
+    { filename: "Voronoise.frg",               gpuHeavy: false },
+    { filename: "MengerSponge.frg",            gpuHeavy: true  }, // ## HEAVY
+    { filename: "MandelbrotDistance.frg",      gpuHeavy: false },
+    { filename: "BallofFire.frg",              gpuHeavy: false },
+    { filename: "RayTracingSphereExample.frg", gpuHeavy: true  }, // ## HEAVY
+    { filename: "Bubbles.frg",                 gpuHeavy: false },
+    { filename: "OnOffSpikes.frg",             gpuHeavy: true  }, // ## HEAVY
+    { filename: "DiskIntersection.frg",        gpuHeavy: true  }, // ## HEAVY
+    { filename: "CubesAndSpheres.frg",         gpuHeavy: true  }, // ## HEAVY
+    { filename: "SeascapeSailing.frg",         gpuHeavy: true  }, // ## HEAVY
+    { filename: "InversionMachine.frg",        gpuHeavy: true  }, // ## HEAVY
 
-    // { filename: "FlightOverBespin.frg", texture0: noiseRGBA },
+//    { filename: "ExplosionEffect.frg", gpuHeavy: true,  texture0: noiseRGBA },
 
-//    { filename: "DoodlingSpeed.frg", texture0: noiseGRAY },
-
-// "HappyJumping.frg",  // ES 3.0 :(
-
-  "GradientCircles.frg",
-
-  "WarpVortex.frg",
-
-  { filename: "SpaceCurvature.frg",  texture0: stars , texture1: organic2 },
-
-    "FlightOverBespin.frg",
-
-    // { filename: "DoodlingSpeed.frg", texture0: noiseGRAY },
-
-      "PlanetShadertoy.frg",
-      "TheHomeDrive.frg",
-      "FlowOfCells.frg",
-      "GeodesicTiling.frg",
-      "FluxCore.frg",
-      // "InsideTheMatrix.frg",  // ES 3.0 :(
-      "InfinityMatrixLite.frg",
-      "ElectricSinusoid.frg",
-      "LightsInSmoke.frg",
-      "BokehTraffic.frg",
-      "TambysSnowflakes.frg",
-      "BokehBlur.frg",
-      "UltraLiquidBokeh.frg",
-      "TileableWaterCaustic.frg",
-      "LiquidCubes.frg",
-      "RaymarchedReflections.frg",
-      "Supernovae.frg",
-      "Protophore.frg",
-      "GalaxyOfUniverses.frg",
-      "AwesomeStar.frg",
-      "MandelbrotSmooth.frg",
-      "Threads.frg",
-      "ProteanClouds.frg",
-      "GiveItMoire.frg",
-      "Seascape.frg",
-      "Creation.frg",
-      "Flame.frg",
-      "Warping.frg",
-      "Voronoise.frg",
-      "MengerSponge.frg",
-      "MandelbrotDistance.frg",
-      "BallofFire.frg",
-      "RayTracingSphereExample.frg",
-      "Bubbles.frg",
-      "OnOffSpikes.frg",
-      // "InversionMachine.frg", // IFFY
-      "DiskIntersection.frg",
-      "CubesAndSpheres.frg",
-      "SeascapeSailing.frg",
-      "InversionMachine.frg",
-
-//    { filename: "ExplosionEffect.frg",   texture0: noiseRGBA },
-
-    { filename: "Clouds.frg",        texture0: noiseRGBA },
-    { filename: "Generators.frg",        texture0: noiseRGBA },
-//    { filename: "DigitalBrain.frg",      texture0: noiseRGBA },
-    { filename: "2DClouds.frg",        texture0: noiseRGBA },
-    { filename: "Oceanic.frg",         texture0: noiseGRAY },
-    { filename: "RainierMood.frg",     texture0: noiseRGBA }
+    { filename: "Clouds.frg",          gpuHeavy: true, texture0: noiseRGBA }, // HEAVY
+    { filename: "Generators.frg",      gpuHeavy: true, texture0: noiseRGBA }, // HEAVY
+//    { filename: "DigitalBrain.frg",  gpuHeavy: true,  texture0: noiseRGBA }, // HEAVY
+    { filename: "2DClouds.frg",        gpuHeavy: true, texture0: noiseRGBA }, // HEAVY
+    { filename: "Oceanic.frg",         gpuHeavy: true, texture0: noiseGRAY }, // HEAVY
+    { filename: "RainierMood.frg",     gpuHeavy: true, texture0: noiseRGBA } // HEAVY
   ];
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -233,7 +228,7 @@ px.import({       scene: 'px:scene.1.js',
     if(texture1) { uniforms[ "s_texture1" ] = "sampler2D"; }
     if(texture2) { uniforms[ "s_texture2" ] = "sampler2D"; }
 
-    var createCfg =
+    let createCfg =
     {
       t: 'shaderResource',
       fragment: shader,
@@ -316,9 +311,30 @@ px.import({       scene: 'px:scene.1.js',
 
   function NextShader()
   {
-    index++;
-    if(index >= toys.length )
-      index = 0; // WRAP
+    while(toys.length > 1)
+    {
+      if(++index >= toys.length )
+        index = 0; // WRAP
+
+      console.log("INFO:  Next >>  Shader["+index+"]: " + toys[index].filename + "  gpuHeavy: " + toys[index].gpuHeavy + "  GPU: " + gpuHeavy);
+
+      if(gpuHeavy == false)
+      {
+        if(toys[index].gpuHeavy == false) // found next LIGHT one
+        {
+          break;
+        }
+        else
+        {
+          console.log("INFO:  Next >> skipping Shader: " + toys[index].filename + "  gpuHeavy: " + toys[index].gpuHeavy);
+        }
+      }
+      else
+      {
+        console.log("INFO:  ELSE Break");
+        break;
+      }
+    }
 
     LoadShader(toys[index]);
     ResetInterval();
@@ -326,9 +342,29 @@ px.import({       scene: 'px:scene.1.js',
 
   function PrevShader()
   {
-    index--;
-    if(index < 0 )
-      index = toys.length - 1; // WRAP
+    while(toys.length > 1)
+    {
+      if(--index < 0 )
+        index = toys.length - 1; // WRAP
+
+        console.log("INFO:  Prev >>  Shader["+index+"]: " + toys[index].filename + "  gpuHeavy: " + toys[index].gpuHeavy);
+
+      if(gpuHeavy == false)
+      {
+        if(toys[index].gpuHeavy == false)
+        {
+          break;
+        }
+        else
+        {
+          console.log("INFO:  Prev >> skipping Shader: " + toys[index].filename + "  gpuHeavy: " + toys[index].gpuHeavy);
+        }
+      }
+      else
+      {
+        break;
+      }
+    }
 
     LoadShader(toys[index]);
     ResetInterval();
