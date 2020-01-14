@@ -63,7 +63,6 @@ px.import({       scene: 'px:scene.1.js',
 
   var toys =
   [
-    { filename: "TriangleGridContouring.frg",  gpuHeavy: false },
     { filename: "GradientCircles.frg",         gpuHeavy: false },
     { filename: "WarpVortex.frg",              gpuHeavy: false },
     { filename: "SpaceCurvature.frg",          gpuHeavy: true,  texture0: stars , texture1: organic2 },   // ## HEAVY
@@ -75,6 +74,7 @@ px.import({       scene: 'px:scene.1.js',
     { filename: "FluxCore.frg",                gpuHeavy: true  }, // ## HEAVY
     { filename: "InfinityMatrixLite.frg",      gpuHeavy: true  }, // ## HEAVY
     { filename: "ElectricSinusoid.frg",        gpuHeavy: false },
+    { filename: "TriangleGridContouring.frg",  gpuHeavy: true },
     { filename: "LightsInSmoke.frg",           gpuHeavy: true  }, // ## HEAVY
     { filename: "BokehTraffic.frg",            gpuHeavy: true  }, // ## HEAVY
     { filename: "TambysSnowflakes.frg",        gpuHeavy: true  }, // ## HEAVY
