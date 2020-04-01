@@ -27,6 +27,15 @@ Rendering animated "Clock".
 
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxScene_Clock/SAMPLE/pxClock.gif"  alt="Image of Clock" width="300">
 
+
+
+
+## Clock -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxPong)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxPong/pxPong.js)
+
+Simple tribute to classic Pong game.
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxPong/SAMPLE/pxPong.gif"  alt="Image of Pong" width="300">
+
 ## pxSnowFlakes -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/dist/output.js)
 
 Basic "particle system"-like simulation.
