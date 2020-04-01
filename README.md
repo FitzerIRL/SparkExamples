@@ -19,6 +19,14 @@ Rendering circualar progress Gauges.
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/GaugeSVG/SAMPLE/GaugesSVG.gif"  alt="Image of Gauges" width="300">
 
 
+
+## Clock -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxScene_Clock)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxScene_Clock/pxClock.js)
+
+Rendering animated "Clock".
+
+
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxScene_Clock/SAMPLE/pxClock.gif"  alt="Image of Clock" width="300">
+
 ## pxSnowFlakes -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/dist/output.js)
 
 Basic "particle system"-like simulation.
