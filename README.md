@@ -11,12 +11,12 @@ Rendering a Spark Logo animation.
 <img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/SparkAnim/SparkAnim.gif"  alt="Image of SparkAnim" width="300">
 
 
-## Gauges -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/GaugesSVG)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/GaugesSVG/index.js)
+## Gauges -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/GaugeSVG)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/GaugeSVG/index.js)
 
 Rendering circualar progress Gauges.
 
 
-<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/Gauges/SAMPLE/GaugesSVG.gif"  alt="Image of Gauges" width="300">
+<img src="https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/GaugeSVG/SAMPLE/GaugesSVG.gif"  alt="Image of Gauges" width="300">
 
 
 ## pxSnowFlakes -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxSnowFlakes)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxSnowFlakes/dist/output.js)
