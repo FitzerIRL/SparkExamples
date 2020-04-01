@@ -30,7 +30,7 @@ Rendering animated "Clock".
 
 
 
-## Clock -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxPong)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxPong/pxPong.js)
+## pxPong -  [folder](https://github.com/FitzerIRL/SparkExamples/tree/master/pxPong)  -  [launch](https://raw.githubusercontent.com/FitzerIRL/SparkExamples/master/pxPong/pxPong.js)
 
 Simple tribute to classic Pong game.
 
