@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "bl": ">=2.2.1",
+    "decompress": ">=4.2.1",
     "file-loader": "^2.0.0",
     "image-webpack-loader": "^4.3.1",
     "loader-utils": "^1.1.0",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "bl": ">=2.2.1",
+    "decompress": ">=4.2.1",
     "copy-webpack-plugin": "^5.0.5"
   }
 }
