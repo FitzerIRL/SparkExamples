@@ -59,10 +59,17 @@ px.import({       scene: 'px:scene.1.js',
                 #define iMouse      u_mouse
                 #define texture     texture2D
                 #define textureLod  texture2D
+
+                // Not available in OpenGL ES 2.0
+                //
+                float round(float x) {
+                  return floor(x + 0.5);
+                }
                 `;
 
   var toys =
   [
+    { filename: "NeonTunnel.frg",              gpuHeavy: false, texture0: noiseRGBA },
     { filename: "Spectrum.frg",                gpuHeavy: false },
     { filename: "GradientCircles.frg",         gpuHeavy: false },
     { filename: "WarpVortex.frg",              gpuHeavy: false },
